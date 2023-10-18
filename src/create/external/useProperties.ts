@@ -25,6 +25,7 @@ export function useProperties() {
   };
 
   return {
+    importProperties: () => {},
     makeProperties: makeProperties,
     downloadProperties: (title: string) => {
       const { ko, en, jp, cn } = makeProperties();

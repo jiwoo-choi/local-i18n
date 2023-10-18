@@ -6,30 +6,31 @@ import { useDeferredValue, useState } from "react";
 
 export function CreateRow({ idKey }: { idKey: string }) {
   const { data, saveFormat } = useFormat();
-  const [key, setKey] = useState(data[idKey].key ?? "");
-  const [ko, setKo] = useState(data[idKey]?.ko ?? "");
-  const [en, setEn] = useState(data[idKey]?.en ?? "");
-  const [jp, setJp] = useState(data[idKey]?.jp ?? "");
-  const [cn, setCn] = useState(data[idKey]?.cn ?? "");
-  const dKey = useDeferredValue(key);
-  const dKo = useDeferredValue(ko);
-  const dEn = useDeferredValue(en);
-  const dJp = useDeferredValue(jp);
-  const dCn = useDeferredValue(cn);
+  const [dKey, setKey] = useState(data[idKey].key ?? "");
+  const [dKo, setKo] = useState(data[idKey]?.ko ?? "");
+  const [dEn, setEn] = useState(data[idKey]?.en ?? "");
+  const [dJp, setJp] = useState(data[idKey]?.jp ?? "");
+  const [dCn, setCn] = useState(data[idKey]?.cn ?? "");
+  const key = dKey;
+  const ko = dKo;
+  const en = dEn;
+  const jp = dJp;
+  const cn = dCn;
+
   return (
     <TableRow>
       <TableCell>
         <Textarea
-          value={dKey}
+          value={key}
           onChange={(e) => {
             setKey(e.target.value);
-            saveFormat(idKey, {
-              key: e.target.value,
-              ko,
-              en,
-              jp,
-              cn,
-            });
+            // saveFormat(idKey, {
+            //   key: e.target.value,
+            //   ko,
+            //   en,
+            //   jp,
+            //   cn,
+            // });
           }}
         />
       </TableCell>

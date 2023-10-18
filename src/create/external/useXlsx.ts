@@ -1,13 +1,28 @@
 import { FormatType } from "@/create/format/FormatType";
 import { useFormat } from "@/create/format/useFormat";
-import { useId } from "react";
+import { ChangeEvent, useId } from "react";
 import * as XLSX from "xlsx";
 
 export function useXlsx() {
   const { data } = useFormat();
-  const id = useId();
-
   return {
+    handleImportXlsx: (
+      e: ChangeEvent<HTMLInputElement>
+    ): Promise<XLSX.WorkBook | null> => {
+      if (!e.target.files || e.target.files.length < 1) {
+        return Promise.resolve(null);
+      }
+      const file = e.target.files[0];
+      const promise = new Promise<XLSX.WorkBook>((resolve) => {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          /* e.target.result is an ArrayBuffer */
+          resolve(XLSX.read(e.target?.result));
+        };
+        reader.readAsArrayBuffer(file);
+      });
+      return promise;
+    },
     parseXlsx: (workbook: XLSX.WorkBook): FormatType => {
       const firstSheet = workbook.SheetNames[0];
       const sheet = workbook.Sheets[firstSheet];
