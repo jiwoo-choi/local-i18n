@@ -24,13 +24,13 @@ export function CreateRow({ idKey }: { idKey: string }) {
           value={key}
           onChange={(e) => {
             setKey(e.target.value);
-            // saveFormat(idKey, {
-            //   key: e.target.value,
-            //   ko,
-            //   en,
-            //   jp,
-            //   cn,
-            // });
+            saveFormat(idKey, {
+              key: e.target.value,
+              ko,
+              en,
+              jp,
+              cn,
+            });
           }}
         />
       </TableCell>
