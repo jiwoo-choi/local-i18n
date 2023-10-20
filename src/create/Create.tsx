@@ -10,14 +10,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CreateLoad } from "@/create/operation/CreateLoad";
+import { CreateLoad } from "@/workspace/topbar/operation/CreateLoad";
 import { CreateRow } from "@/create/CreateRow";
-import { CreateSave } from "@/create/operation/CreateSave";
+import { CreateSave } from "@/workspace/topbar/operation/save/CreateSave";
 import { useFormat } from "@/create/format/useFormat";
 import { useFormatLocalStorage } from "@/create/format/useFormatLocalStorage";
 import { Plus } from "lucide-react";
-import { CreateClear } from "@/create/operation/CreateClear";
+import { CreateClear } from "@/workspace/topbar/operation/CreateClear";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Sidebar } from "@/workspaces/sidebar/Sidebar";
 
 export function Create() {
   const { dataSaveOnLocalStorage, setDataSaveOnLocalStorage } =
@@ -26,7 +27,7 @@ export function Create() {
   return (
     <>
       <div className="hidden h-full flex-col md:flex">
-        <div className="container flex flex-col items-start justify-between space-y-2 py-4 sm:flex-row sm:items-center sm:space-y-0 md:h-16">
+        <div className="container flex flex-col items-start justify-between space-y-2 py-4 sm:flex-row sm:items-center sm:space-y-0 md:h-16 sticky top-0 bg-white z-50 border-b-2">
           <h2 className="text-lg font-semibold">번역어 관리</h2>
           <div className="ml-auto flex space-x-2 sm:justify-end">
             <div className="flex items-center space-x-2 mr-3">
@@ -46,7 +47,7 @@ export function Create() {
             <div className="hidden space-x-2 md:flex"></div>
           </div>
         </div>
-        <Separator></Separator>
+        <Sidebar />
         <div className="container py-4">
           <Table>
             <TableHeader>

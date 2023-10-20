@@ -1,11 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Create } from "./create/Create";
-import { FormatProvider } from "@/create/format/FormatProvider";
+import { WorkspaceLayout } from "@/workspaces/WorkspaceLayout";
 
 export default function App() {
-  return (
-    <FormatProvider>
-      <Create />
-    </FormatProvider>
-  );
+  return <WorkspaceLayout />;
+  // return <FormatProvider>{/* <Create /> */}</FormatProvider>;
 }
