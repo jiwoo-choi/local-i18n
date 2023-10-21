@@ -7,7 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useAppDispatch, useAppSelector } from "@/index";
-import { KeyTableBody } from "@/workspace/table/KeyTableBody";
+import { KeyTableBody } from "@/workspace/table/KeyTableRow";
 import { addRow } from "@/workspaces/workspaceSlice";
 import { Plus } from "lucide-react";
 import { useId } from "react";
