@@ -1,16 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/index";
 import { cn } from "@/lib/utils";
-import {
-  WorkspaceType,
-  goToWorkspace,
-  removeWorkspace,
-  updateWorkspace,
-} from "@/workspaces/workspaceSlice";
+import { useCurrentWorkspaceID } from "@/workspaces/@data/CurrentWorkspaceProvider";
+import { removeWorkspace } from "@/workspaces/@data/workspaceSlice";
 import { EntityId } from "@reduxjs/toolkit";
 import { X } from "lucide-react";
-import { FunctionComponent, useState } from "react";
-import { useSelector } from "react-redux";
+import { FunctionComponent } from "react";
 
 export function SidebarItem({
   renderIcon,
@@ -20,15 +15,10 @@ export function SidebarItem({
   workspaceId: EntityId;
 }) {
   const workspaces = useAppSelector((state) => state.workspaceSlice.workspaces);
-  const currentWorkspace = useAppSelector(
-    (state) => state.workspaceSlice.currentWorkspace
-  );
-
+  const { currWorkspaceId, goToWorkspace } = useCurrentWorkspaceID();
   const dispatch = useAppDispatch();
   const workspace = workspaces.entities[workspaceId];
-  const isSelect = currentWorkspace?.id === workspace?.id;
-  const [visible, setVisible] = useState(isSelect);
-
+  const isSelect = currWorkspaceId && currWorkspaceId === workspaceId;
   if (!workspace) {
     return null;
   }
@@ -36,7 +26,7 @@ export function SidebarItem({
     <Button
       variant={isSelect ? "secondary" : "ghost"}
       className="w-full justify-start"
-      onClick={() => dispatch(goToWorkspace(workspace))}
+      onClick={() => goToWorkspace(workspaceId)}
     >
       <div className="flex justify-betweens items-center w-full">
         <div className="w-full flex items-center">

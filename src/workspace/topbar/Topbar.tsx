@@ -1,4 +1,4 @@
-import { CreateLoad } from "@/workspace/topbar/operation/CreateLoad";
+import { CreateLoad } from "./operation/CreateLoad";
 import { CreateSave } from "@/workspace/topbar/operation/save/CreateSave";
 
 export function Topbar() {

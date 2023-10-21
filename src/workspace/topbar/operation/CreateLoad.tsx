@@ -10,14 +10,15 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useCurrRowID } from "@/workspace/@data/CurrentRowProvider";
 import { useXlsx } from "@/workspace/topbar/external/useXlsx";
 import { FolderInput } from "lucide-react";
 import { useState } from "react";
 
 export function CreateLoad() {
   const [opened, setOpen] = useState(false);
-
-  const { handleLoadXlsx, parseXlsx } = useXlsx();
+  const { workspaceOfRowsId } = useCurrRowID();
+  const { handleLoadXlsx, parseXlsx } = useXlsx(workspaceOfRowsId);
 
   return (
     <Dialog open={opened} onOpenChange={(open) => setOpen(open)}>
@@ -41,7 +42,7 @@ export function CreateLoad() {
               const data = await handleLoadXlsx(e);
               console.log(data);
               if (data) {
-                const formatType = parseXlsx(data);
+                parseXlsx(data);
                 setOpen(false);
               }
             }}

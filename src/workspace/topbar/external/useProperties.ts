@@ -1,12 +1,19 @@
-import { useFormat } from "@/create/format/useFormat";
 import { useAppSelector } from "@/index";
+import {
+  findByWorkspaceIdSelector,
+  rowNormalizerSelectors,
+} from "@/workspaces/@data/workspaceSelectors";
+import { rowNormalizer } from "@/workspaces/@data/workspaceSlice";
+import { EntityId } from "@reduxjs/toolkit";
 import { saveAs } from "file-saver";
 import { PropertiesEditor } from "properties-file/editor";
 
-export function useProperties() {
+export function useProperties(workspaceEntityId: EntityId) {
   const workspace = useAppSelector(
-    (state) => state.workspaceSlice.currentWorkspace
+    findByWorkspaceIdSelector(workspaceEntityId)
   );
+  const rowEntities = workspace?.rows ?? rowNormalizer.getInitialState();
+  const rows = rowNormalizerSelectors.selectAll(rowEntities);
 
   const makeProperties = () => {
     const koProperties = new PropertiesEditor("");
@@ -14,7 +21,7 @@ export function useProperties() {
     const jpProperties = new PropertiesEditor("");
     const cnProperties = new PropertiesEditor("");
 
-    workspace?.rows.forEach((value) => {
+    rows?.forEach((value) => {
       console.log(value);
       koProperties.insert(value.langs.key, value.langs.ko ?? "");
       enProperties.insert(value.langs.key, value.langs.en ?? "");

@@ -4,7 +4,7 @@ import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { configureStore } from "@reduxjs/toolkit";
-import workspaceSlice from "@/workspaces/workspaceSlice";
+import workspaceSlice from "@/workspaces/@data/workspaceSlice";
 import {
   useDispatch,
   useSelector,

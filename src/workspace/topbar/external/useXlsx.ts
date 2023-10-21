@@ -1,7 +1,14 @@
-import { FormatType } from "@/create/format/FormatType";
-import { useFormat } from "@/create/format/useFormat";
 import { useAppDispatch, useAppSelector } from "@/index";
-import { RowType, importsRows } from "@/workspaces/workspaceSlice";
+import {
+  findByWorkspaceIdSelector,
+  rowNormalizerSelectors,
+} from "@/workspaces/@data/workspaceSelectors";
+import {
+  RowType,
+  importsRows,
+  rowNormalizer,
+} from "@/workspaces/@data/workspaceSlice";
+import { EntityId } from "@reduxjs/toolkit";
 import { ChangeEvent, useId } from "react";
 import * as XLSX from "xlsx";
 
@@ -64,14 +71,14 @@ function downloadWithTransformStrategy(
   ]);
   return { wb, ws };
 }
-export function useXlsx() {
+export function useXlsx(workspaceEntityId: EntityId) {
   const dispatch = useAppDispatch();
-
-  const currentWorkspace = useAppSelector(
-    (state) => state.workspaceSlice.currentWorkspace
+  const workspace = useAppSelector(
+    findByWorkspaceIdSelector(workspaceEntityId)
   );
-
-  // const { data } = useFormat();
+  const rowEntities = workspace?.rows ?? rowNormalizer.getInitialState();
+  const rows = rowNormalizerSelectors.selectAll(rowEntities);
+  const uniq_id = useId();
   return {
     handleLoadXlsx: (
       e: ChangeEvent<HTMLInputElement>
@@ -100,26 +107,17 @@ export function useXlsx() {
         cn: string;
         jp: string;
       }[];
-
-      console.log(
-        converted.map((value, index) => {
-          return {
-            id: Date.now().toString() + `__+${index}_`,
-            key: value.key,
-            langs: value,
-          };
-        }) as RowType[]
-      );
       dispatch(
-        importsRows(
-          converted.map((value, index) => {
+        importsRows({
+          workspaceId: workspaceEntityId,
+          rows: converted.map((value, index) => {
             return {
-              id: Date.now().toString() + `${index}_`,
+              id: Date.now().toString() + `${index}_${uniq_id}`,
               key: value.key,
               langs: value,
             };
-          }) as RowType[]
-        )
+          }) as RowType[],
+        })
       );
     },
     downloadXlsx: ({
@@ -138,17 +136,14 @@ export function useXlsx() {
           transformOption?: never;
         }) => {
       if (exportStrategy === XLSXExportStrategy.DOWNLOAD_ALL) {
-        const { ws, wb } = downloadAllStrategy(currentWorkspace?.rows ?? []);
+        const { ws, wb } = downloadAllStrategy(rows);
         XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
         XLSX.writeFile(wb, `${title}.xlsx`, {
           type: "file",
           compression: true,
         });
       } else if (exportStrategy === XLSXExportStrategy.WITH_TRANSFORM) {
-        const { ws, wb } = downloadWithTransformStrategy(
-          currentWorkspace?.rows ?? [],
-          transformOption
-        );
+        const { ws, wb } = downloadWithTransformStrategy(rows, transformOption);
         XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
         XLSX.writeFile(wb, `${title}.xlsx`, {
           type: "file",

@@ -1,15 +1,13 @@
-import { useAppSelector } from "@/index";
+import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useCurrRowID } from "@/workspace/@data/CurrentRowProvider";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import { Button } from "@/components/ui/button";
 
 export function AsideBar() {
-  // 현재 클릭한 asidebar가 있는지
-  const currentRow = useAppSelector(
-    (state) => state.workspaceSlice.currentWorkspace?.currentRow
-  );
-  if (!currentRow) {
+  const { currRow } = useCurrRowID();
+
+  if (!currRow) {
     return null;
   }
   return (
@@ -35,7 +33,7 @@ export function AsideBar() {
                 style={github}
                 customStyle={{ borderRadius: "0.5rem" }}
               >
-                {`<spring:message code=\"${currentRow.langs.key}\"/>`}
+                {`<spring:message code="${currRow.langs.key}"/>`}
               </SyntaxHighlighter>
             </TabsContent>
             <TabsContent value="translate">
@@ -44,7 +42,7 @@ export function AsideBar() {
                 style={github}
                 customStyle={{ borderRadius: "0.5rem" }}
               >
-                {`t('${currentRow.langs.key}')`}
+                {`t('${currRow.langs.key}')`}
               </SyntaxHighlighter>
             </TabsContent>
             <TabsContent value="IM">
@@ -53,7 +51,7 @@ export function AsideBar() {
                 style={github}
                 customStyle={{ borderRadius: "0.5rem" }}
               >
-                {`IM('${currentRow.langs.key}')`}
+                {`IM('${currRow.langs.key}')`}
               </SyntaxHighlighter>
             </TabsContent>
           </Tabs>
@@ -63,9 +61,9 @@ export function AsideBar() {
             단어 검색
           </h2>
           <div className="space-y-2">
-            {Object.keys(currentRow.langs).map((value, index) => {
+            {Object.keys(currRow.langs).map((value, index) => {
               if (value === "key") {
-                return;
+                return null;
               }
               return (
                 <Button className="flex w-[70px]" variant={"secondary"}>

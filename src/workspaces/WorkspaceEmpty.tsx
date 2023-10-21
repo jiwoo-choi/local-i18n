@@ -1,20 +1,25 @@
 import { Button } from "@/components/ui/button";
 import { useAppDispatch, useAppSelector } from "@/index";
-import { addWorkspace, goToWorkspace } from "@/workspaces/workspaceSlice";
+import { useCurrentWorkspaceID } from "@/workspaces/@data/CurrentWorkspaceProvider";
+import {
+  WorkspaceStep,
+  addWorkspace,
+  rowNormalizer,
+} from "@/workspaces/@data/workspaceSlice";
 import { Plus } from "lucide-react";
 import { useEffect } from "react";
 
 export function WorkspaceEmpty() {
   const workspace = useAppSelector((state) => state.workspaceSlice.workspaces);
   const dispatch = useAppDispatch();
-
+  const { goToWorkspace } = useCurrentWorkspaceID();
   useEffect(() => {
     const work = workspace.entities[workspace.ids[0]];
     if (!work) {
       return;
     }
-    dispatch(goToWorkspace(work));
-  }, [workspace, dispatch]);
+    goToWorkspace(workspace.ids[0]);
+  }, [workspace, goToWorkspace]);
   if (workspace.ids.length === 0) {
     return (
       <div className="w-full h-full flex justify-center items-center">
@@ -31,7 +36,8 @@ export function WorkspaceEmpty() {
                 addWorkspace({
                   title: "무제 Untitled",
                   id: Date.now().toString(),
-                  rows: [],
+                  rows: rowNormalizer.getInitialState(),
+                  step: WorkspaceStep.ON_BOARDING,
                 })
               )
             }

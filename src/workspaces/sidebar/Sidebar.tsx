@@ -4,8 +4,8 @@ import { SidebarItem } from "@/workspaces/sidebar/SidebarItem";
 import {
   WorkspaceStep,
   addWorkspace,
-  updateWorkspace,
-} from "@/workspaces/workspaceSlice";
+  rowNormalizer,
+} from "@/workspaces/@data/workspaceSlice";
 import { Layers, Plus } from "lucide-react";
 
 export function Sidebar() {
@@ -36,7 +36,7 @@ export function Sidebar() {
             title: "무제 Untitled",
             id: Date.now().toString(),
             step: WorkspaceStep.ON_BOARDING,
-            rows: [],
+            rows: rowNormalizer.getInitialState(),
           };
           dispatch(addWorkspace(newData));
         }}
