@@ -1,4 +1,5 @@
 import { useAppSelector } from "@/index";
+import { LANGUAGES } from "@/language/@data/Language";
 import {
   findByWorkspaceIdSelector,
   rowNormalizerSelectors,
@@ -16,23 +17,27 @@ export function useJSON(workspaceEntityId: EntityId) {
   return {
     // makeJson: makeJson,
     downloadJson: (title: string) => {
-      const all = rows?.map((value) => value.langs) ?? [];
-      const reduced = all.reduce((memo, curr) => {
-        memo["ko"] = {
-          ...{ ...(memo["ko"] ?? {}) },
-          [curr.key]: curr["ko"],
+      const all =
+        rows?.map((value) => ({
+          key: value.key,
+          ...value.langs,
+        })) ?? [];
+      const reduced = all.reduce((memo, { KO, key, JP, EN, CN }) => {
+        memo[LANGUAGES.KO.key] = {
+          ...{ ...(memo[LANGUAGES.KO.key] ?? {}) },
+          [key]: KO ?? "",
         };
-        memo["en"] = {
-          ...{ ...(memo["en"] ?? {}) },
-          [curr.key]: curr["en"],
+        memo[LANGUAGES.EN.key] = {
+          ...{ ...(memo[LANGUAGES.EN.key] ?? {}) },
+          [key]: EN ?? "",
         };
-        memo["jp"] = {
-          ...{ ...(memo["jp"] ?? {}) },
-          [curr.key]: curr["jp"],
+        memo[LANGUAGES.JP.key] = {
+          ...{ ...(memo[LANGUAGES.JP.key] ?? {}) },
+          [key]: JP ?? "",
         };
-        memo["cn"] = {
-          ...{ ...(memo["cn"] ?? {}) },
-          [curr.key]: curr["cn"],
+        memo[LANGUAGES.CN.key] = {
+          ...{ ...(memo[LANGUAGES.CN.key] ?? {}) },
+          [key]: CN ?? "",
         };
         return memo;
       }, {} as Record<string, Record<string, string>>);

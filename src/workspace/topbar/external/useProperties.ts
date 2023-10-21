@@ -22,11 +22,10 @@ export function useProperties(workspaceEntityId: EntityId) {
     const cnProperties = new PropertiesEditor("");
 
     rows?.forEach((value) => {
-      console.log(value);
-      koProperties.insert(value.langs.key, value.langs.ko ?? "");
-      enProperties.insert(value.langs.key, value.langs.en ?? "");
-      jpProperties.insert(value.langs.key, value.langs.jp ?? "");
-      cnProperties.insert(value.langs.key, value.langs.cn ?? "");
+      koProperties.insert(value.key, value.langs["KO"] ?? "");
+      enProperties.insert(value.key, value.langs["EN"] ?? "");
+      jpProperties.insert(value.key, value.langs["JP"] ?? "");
+      cnProperties.insert(value.key, value.langs["CN"] ?? "");
     });
     return {
       ko: koProperties,

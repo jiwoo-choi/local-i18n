@@ -6,22 +6,33 @@ import { WorkspaceOnBoarding } from "@/workspaces/onboarding/WorkspaceOnBoarding
 import { Sidebar } from "@/workspaces/sidebar/Sidebar";
 import { CurrentRowIDProvider } from "@/workspace/@data/CurrentRowProvider";
 
+{
+  /** cols로 하는 방식들은 대응해야할게 많음. grid는 동적 컨트롤 하기 좋으니 후에 고려 */
+}
+
 export function WorkspaceLayout() {
   const { currWorkspaceId, currWorkspace } = useCurrentWorkspaceID();
   return (
     <div
-      className="grid grid-cols-4 lg:grid-cols-5 xl:grid-cols-6"
-      style={{ height: "calc(100vh - 63px)" }}
-      id="adfadsf"
+      className="flex relative "
+      style={{ height: "calc(100vh)" }}
+      id="all-cols"
     >
-      <div className="absolute lg:relative xl:relatve space-y-4 py-4">
+      <div
+        id="layout"
+        className="absolute h-full z-20 py-6 px-1 sm:min-w-[280px] lg:min-w-[300px] sm:max-w-[200px] lg:max-w-[300px] hidden sm:block border-r"
+      >
         <div className="px-3 py-2">
-          <div className="pb-12 hidden lg:block">
+          <div className="pb-12">
             <Sidebar />
           </div>
         </div>
       </div>
-      <div className="col-span-4 lg:col-span-4 lg:border-l xl:col-span-5 relative">
+      <div
+        id="layout-fake"
+        className="relative z-1 sm:min-w-[280px] lg:min-w-[300px] hidden sm:block"
+      />
+      <div className="relative w-full">
         {currWorkspace?.step === WorkspaceStep.ON_BOARDING && (
           <WorkspaceOnBoarding
             key={currWorkspace.id}

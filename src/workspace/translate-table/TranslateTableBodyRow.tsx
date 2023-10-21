@@ -1,6 +1,7 @@
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { useAppDispatch, useAppSelector } from "@/index";
+import { LanguageKeyType } from "@/language/@data/Language";
 import { cn } from "@/lib/utils";
 import { useCurrRowID } from "@/workspace/@data/CurrentRowProvider";
 import {
@@ -26,29 +27,14 @@ export function TranslateTableBodyRow({ rowId }: { rowId: EntityId }) {
   if (!thisRow) {
     return null;
   }
-  const updateCellByLangKey = ({
-    translateValue,
-    langKey,
-  }: {
-    langKey: string | "key";
-    translateValue: string;
-  }) => {
-    dispatch(
-      updateCell({
-        cell: {
-          translateKey: thisRow.key,
-          translateValue: translateValue,
-          langKey: langKey,
-        },
-        rowId: rowId,
-        workspaceId: workspaceOfRowsId,
-      })
-    );
-  };
 
   return (
     <TableRow
       onClick={() => {
+        if (rowId === currRow?.id) {
+          goToRow("");
+          return;
+        }
         goToRow(rowId);
       }}
       className={cn(isHighlighted ? "bg-muted hover:bg-muted" : "")}
@@ -58,24 +44,35 @@ export function TranslateTableBodyRow({ rowId }: { rowId: EntityId }) {
           onClick={(e) => e.stopPropagation()}
           value={thisRow.key}
           onChange={(e) => {
-            updateCellByLangKey({
-              langKey: "key",
-              translateValue: e.target.value,
-            });
+            dispatch(
+              updateCell({
+                cell: {
+                  translateKey: e.target.value,
+                },
+                rowId: rowId,
+                workspaceId: workspaceOfRowsId,
+              })
+            );
           }}
         />
       </TableCell>
-      {currentWorkspace.contents?.langs.map((langKey, _idx) => {
+      {currentWorkspace.contents?.langMeta.map((lang, _idx) => {
         return (
-          <TableCell key={`${langKey}_index_${uniq_id}_${_idx}`}>
+          <TableCell key={`${lang.key}_index_${uniq_id}_${_idx}`}>
             <Textarea
               onClick={(e) => e.stopPropagation()}
-              value={thisRow.langs[langKey]}
+              value={thisRow.langs[lang.key]}
               onChange={(e) => {
-                updateCellByLangKey({
-                  langKey: langKey,
-                  translateValue: e.target.value,
-                });
+                dispatch(
+                  updateCell({
+                    cell: {
+                      translateValue: e.target.value,
+                      langKey: lang.key,
+                    },
+                    rowId: rowId,
+                    workspaceId: workspaceOfRowsId,
+                  })
+                );
               }}
             />
           </TableCell>

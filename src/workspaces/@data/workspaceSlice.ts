@@ -1,3 +1,4 @@
+import { LanguageKeyType, LanguageType } from "@/language/@data/Language";
 import {
   rowNormalizerSelectors,
   workspaceNormalizerSelectors,
@@ -24,15 +25,27 @@ export const workspaceNormalizer = createEntityAdapter<WorkspaceType>({
 });
 
 export type CellType = {
-  langKey: string;
-  translateKey: string;
-  translateValue: string;
+  langKey?: LanguageKeyType;
+  translateValue?: string;
+  translateKey?: string;
 };
+
+type CellInputType =
+  | {
+      translateKey: string;
+      langKey?: never;
+      translateValue?: never;
+    }
+  | {
+      translateKey?: never;
+      langKey: LanguageKeyType;
+      translateValue: string;
+    };
 
 export type RowType = {
   id: EntityId;
   key: string;
-  langs: Record<string, string>;
+  langs: Partial<Record<LanguageKeyType, string>>;
 };
 
 export type WorkspaceType = {
@@ -41,7 +54,7 @@ export type WorkspaceType = {
   step: WorkspaceStep;
   contents?: {
     title: string;
-    langs: string[];
+    langMeta: LanguageType[];
   };
   rows: EntityState<RowType>;
 };
@@ -108,36 +121,33 @@ export const workspaceSlice = createSlice({
       }: PayloadAction<{
         workspaceId: EntityId;
         rowId: EntityId;
-        cell: CellType;
+        cell: CellInputType;
       }>
     ) => {
-      const workspace = workspaceNormalizerSelectors.selectById(
-        state.workspaces,
-        workspaceId
-      );
+      const workspace = state.workspaces.entities[workspaceId];
       if (!workspace) {
         return;
       }
-      const row = rowNormalizerSelectors.selectById(workspace.rows, rowId);
+      if (!workspace) {
+        return;
+      }
+      const row = workspace.rows.entities[rowId];
       if (!row) {
         return;
       }
+      const newLangs =
+        cell.langKey && cell.translateValue
+          ? { [cell.langKey]: cell.translateValue }
+          : { ...row.langs };
+      const newTranslateKey = cell.translateKey ?? row.key;
       rowNormalizer.updateOne(workspace.rows, {
         id: rowId,
         changes: {
           id: row.id,
-          key: cell.translateKey,
-          langs: {
-            ...{ ...row.langs },
-            ...{ [cell.langKey]: cell.translateValue },
-          },
+          key: newTranslateKey,
+          langs: newLangs,
         },
       });
-      const updateAction: Update<WorkspaceType> = {
-        id: workspaceId,
-        changes: workspace,
-      };
-      workspaceNormalizer.updateOne(state.workspaces, updateAction);
     },
   },
   extraReducers: (builder) => {

@@ -1,4 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/index";
+import { LANGUAGES } from "@/language/@data/Language";
 import {
   findByWorkspaceIdSelector,
   rowNormalizerSelectors,
@@ -33,8 +34,9 @@ function downloadAllStrategy(data: RowType[]) {
       { v: "cn", t: "s" },
     ],
     ...data.map((value) => {
-      const { key, ko, en, jp, cn } = value.langs;
-      return [{ v: key }, { v: ko }, { v: en }, { v: jp }, { v: cn }];
+      const key = value.key;
+      const { KO, EN, JP, CN } = value.langs;
+      return [{ v: key }, { v: KO }, { v: EN }, { v: JP }, { v: CN }];
     }),
   ]);
   return {
@@ -65,8 +67,8 @@ function downloadWithTransformStrategy(
       { v: "translated keyword", t: "s" },
     ],
     ...data.map((value) => {
-      const { key, ko } = value.langs;
-      return [{ v: transformByCodeTransformOption(key) }, { v: ko }];
+      const { KO } = value.langs;
+      return [{ v: transformByCodeTransformOption(value.key) }, { v: KO }];
     }),
   ]);
   return { wb, ws };
@@ -114,8 +116,14 @@ export function useXlsx(workspaceEntityId: EntityId) {
             return {
               id: Date.now().toString() + `${index}_${uniq_id}`,
               key: value.key,
-              langs: value,
-            };
+              langs: {
+                [LANGUAGES.EN.key]: value.en,
+                [LANGUAGES.JP.key]: value.jp,
+                [LANGUAGES.KO.key]: value.ko,
+                [LANGUAGES.CN.key]: value.cn,
+                key: undefined,
+              },
+            } as RowType;
           }) as RowType[],
         })
       );
