@@ -11,6 +11,7 @@ import {
   Provider,
   TypedUseSelectorHook,
 } from "react-redux";
+import settingSlice from "@/setting/@data/settingSlice";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -22,6 +23,7 @@ console.log(
 export const store = configureStore({
   reducer: {
     workspaceSlice,
+    settingSlice,
   },
   preloadedState:
     localStorage.getItem("lolo-test") == null
@@ -29,7 +31,6 @@ export const store = configureStore({
       : JSON.parse(localStorage.getItem("lolo-test") ?? "{}"),
 });
 store.subscribe(() => {
-  console.log(store.getState());
   localStorage.setItem("lolo-test", JSON.stringify(store.getState()));
 });
 

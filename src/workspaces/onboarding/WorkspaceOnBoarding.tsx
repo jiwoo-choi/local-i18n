@@ -193,7 +193,7 @@ export function WorkspaceOnBoarding({ entityId }: { entityId: EntityId }) {
             className="fixed z-50 bottom-0 left-1/2 lg:right-1/2 -translate-x-1/2 shadow-lg"
             {...spring}
           >
-            <Button size="lg" className="w-[272px] shadow-lg">
+            <Button size="xl" className="w-[372px] shadow-lg">
               제출하기
             </Button>
           </motion.div>

@@ -23,7 +23,7 @@ export function CreateLoad() {
   return (
     <Dialog open={opened} onOpenChange={(open) => setOpen(open)}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="shadow-md">
+        <Button variant="default" className="shadow-md">
           <FolderInput className="h-4 w-4 mr-2" />
           불러오기
         </Button>
@@ -40,7 +40,6 @@ export function CreateLoad() {
             type="file"
             onChange={async (e) => {
               const data = await handleLoadXlsx(e);
-              console.log(data);
               if (data) {
                 parseXlsx(data);
                 setOpen(false);
