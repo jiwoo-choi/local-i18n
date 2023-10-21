@@ -3,7 +3,10 @@ import {
   PayloadAction,
   Update,
   createEntityAdapter,
+  createListenerMiddleware,
   createSlice,
+  isAllOf,
+  isAnyOf,
 } from "@reduxjs/toolkit";
 
 export enum WorkspaceStep {
@@ -120,6 +123,13 @@ export const workspaceSlice = createSlice({
       }
       const newLangs = { [action.payload.key]: action.payload.value };
       state.currentWorkspace.rows[action.payload.index] = {
+        ...state.currentWorkspace.rows[action.payload.index],
+        langs: {
+          ...state.currentWorkspace.rows[action.payload.index].langs,
+          ...newLangs,
+        },
+      };
+      state.currentWorkspace.currentRow = {
         ...state.currentWorkspace.rows[action.payload.index],
         langs: {
           ...state.currentWorkspace.rows[action.payload.index].langs,

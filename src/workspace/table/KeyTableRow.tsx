@@ -1,6 +1,7 @@
 import { TableBody, TableCell, TableRow } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { useAppDispatch, useAppSelector } from "@/index";
+import { cn } from "@/lib/utils";
 import { clickRow, updateRow } from "@/workspaces/workspaceSlice";
 import { useId } from "react";
 
@@ -11,6 +12,9 @@ export function KeyTableBody({ index }: { index: number }) {
 
   const id = useId();
   const dispatch = useAppDispatch();
+
+  const isHighlighted =
+    currentWorkspace?.rows[index]?.id === currentWorkspace?.currentRow?.id;
 
   const update = ({
     key,
@@ -35,6 +39,7 @@ export function KeyTableBody({ index }: { index: number }) {
         onClick={() => {
           dispatch(clickRow(index));
         }}
+        className={cn(isHighlighted ? "bg-muted hover:bg-muted" : "")}
       >
         <TableCell>
           <Textarea
