@@ -3,7 +3,14 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
-import { configureStore } from "@reduxjs/toolkit";
+import {
+  ListenerEffectAPI,
+  TypedAddListener,
+  TypedStartListening,
+  addListener,
+  configureStore,
+  createListenerMiddleware,
+} from "@reduxjs/toolkit";
 import workspaceSlice from "@/workspaces/@data/workspaceSlice";
 import {
   useDispatch,
@@ -15,11 +22,10 @@ import settingSlice from "@/setting/@data/settingSlice";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
-console.log(
-  localStorage.getItem("lolo-test") == null
-    ? undefined
-    : JSON.parse(localStorage.getItem("lolo-test") ?? "{}")
-);
+const listenerMiddlewareInstance = createListenerMiddleware({
+  onError: () => console.error,
+});
+
 export const store = configureStore({
   reducer: {
     workspaceSlice,
@@ -29,6 +35,7 @@ export const store = configureStore({
     localStorage.getItem("lolo-test") == null
       ? undefined
       : JSON.parse(localStorage.getItem("lolo-test") ?? "{}"),
+  middleware: (gDM) => gDM().prepend(listenerMiddlewareInstance.middleware),
 });
 store.subscribe(() => {
   localStorage.setItem("lolo-test", JSON.stringify(store.getState()));
@@ -40,6 +47,13 @@ export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+export type AppStartListening = TypedStartListening<RootState, AppDispatch>;
+export type AppAddListener = TypedAddListener<RootState, AppDispatch>;
+export const startAppListening =
+  listenerMiddlewareInstance.startListening as AppStartListening;
+export const addAppListener = addListener as AppAddListener;
+export type AppListenerEffectAPI = ListenerEffectAPI<RootState, AppDispatch>;
+
 // const myStore = createStore();
 
 root.render(

@@ -1,8 +1,5 @@
+import { startAppListening } from "@/index";
 import { LanguageKeyType, LanguageType } from "@/language/@data/Language";
-import {
-  rowNormalizerSelectors,
-  workspaceNormalizerSelectors,
-} from "@/workspaces/@data/workspaceSelectors";
 import {
   EntityId,
   EntityState,

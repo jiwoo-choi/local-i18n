@@ -30,7 +30,7 @@ export function WorkspaceLayout() {
       </div>
       <div
         id="layout-fake"
-        className="relative z-1 sm:min-w-[280px] lg:min-w-[300px] hidden sm:block"
+        className="relative z-1 sm:min-w-[280px] lg:min-w-[300px] hidden sm:block h-full"
       />
       <div className="relative w-full">
         {currWorkspace?.step === WorkspaceStep.ON_BOARDING && (

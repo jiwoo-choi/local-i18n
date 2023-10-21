@@ -1,5 +1,5 @@
-import { WorkspaceLayout } from "@/workspaces/WorkspaceLayout";
 import { CurrentWorkspaceIDProvider } from "@/workspaces/@data/CurrentWorkspaceProvider";
+import { WorkspaceLayout } from "@/workspaces/WorkspaceLayout";
 
 export default function App() {
   return (

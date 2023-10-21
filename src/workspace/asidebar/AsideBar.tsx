@@ -114,42 +114,44 @@ export function AsideBar() {
                       {LANGUAGES[value.key].name}
                     </small>
                   </div>
-                  {value.value.map((item) => {
-                    //relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold
-                    //"hover:underline text-muted-foreground hover:text-foreground hover:shadow-lg hover:font-extrabold"
-                    return (
-                      <a
-                        className={cn(
-                          item.isWordLike
-                            ? "rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm hover:underline text-muted-foreground hover:text-foreground hover:shadow- hover:font-extrabold"
-                            : "text-red-300",
-                          ""
-                        )}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          window.open(
-                            LANGUAGES[value.key].dicLink.replace(
-                              "{{query}}",
-                              item.segment
-                            ),
-                            "PopupWin",
-                            "width=600,height=800"
-                          );
-                        }}
-                        href={
-                          item.isWordLike
-                            ? LANGUAGES[value.key].dicLink.replace(
+                  <div>
+                    {value.value.map((item) => {
+                      //relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold
+                      //"hover:underline text-muted-foreground hover:text-foreground hover:shadow-lg hover:font-extrabold"
+                      return (
+                        <a
+                          className={cn(
+                            item.isWordLike
+                              ? "rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm hover:underline text-muted-foreground hover:text-foreground hover:shadow- hover:font-extrabold"
+                              : "text-red-300",
+                            ""
+                          )}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            window.open(
+                              LANGUAGES[value.key].dicLink.replace(
                                 "{{query}}",
                                 item.segment
-                              )
-                            : ""
-                        }
-                        rel="noreferrer"
-                      >
-                        {item.segment}
-                      </a>
-                    );
-                  })}
+                              ),
+                              "PopupWin",
+                              "width=600,height=800"
+                            );
+                          }}
+                          href={
+                            item.isWordLike
+                              ? LANGUAGES[value.key].dicLink.replace(
+                                  "{{query}}",
+                                  item.segment
+                                )
+                              : ""
+                          }
+                          rel="noreferrer"
+                        >
+                          {item.segment}
+                        </a>
+                      );
+                    })}
+                  </div>
                 </div>
               );
             })}

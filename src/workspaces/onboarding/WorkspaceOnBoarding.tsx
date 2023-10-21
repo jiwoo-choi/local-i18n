@@ -110,48 +110,49 @@ export function WorkspaceOnBoarding({ entityId }: { entityId: EntityId }) {
   }, []);
 
   return (
-    <div className="space-y-6 pl-9 pt-9 h-full" ref={scope}>
-      <div>
-        <h3 className="text-lg font-medium">워크스페이스 등록하기</h3>
-        <p className="text-sm text-muted-foreground">
-          워크스페이스의 이름과 관리할 언어 등록합니다.
-        </p>
-      </div>
-      <Separator />
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit((data) => {
-            dispatch(
-              updateWorkspace({
-                rows: rowNormalizer.getInitialState(),
-                step: WorkspaceStep.CREATED,
-                id: entityId,
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit((data) => {
+          dispatch(
+            updateWorkspace({
+              rows: rowNormalizer.getInitialState(),
+              step: WorkspaceStep.CREATED,
+              id: entityId,
+              title: data.title,
+              contents: {
+                langMeta: data.langs.sort((a, b) => a.sort - b.sort),
                 title: data.title,
-                contents: {
-                  langMeta: data.langs.sort((a, b) => a.sort - b.sort),
-                  title: data.title,
-                },
-              })
-            );
-          })}
-          className="space-y-8"
-        >
-          <FormField
-            control={form.control}
-            name="title"
-            rules={{ required: true }}
-            render={({ field }) => (
-              <FormItem
-                id={"animate1"}
-                style={{ position: "relative", bottom: -20, opacity: 0 }}
-              >
-                <FormLabel>워크스페이스 제목</FormLabel>
-                <FormControl>
-                  <Input placeholder="제목 입력" {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
+              },
+            })
+          );
+        })}
+        className="space-y-6 p-9"
+        ref={scope}
+      >
+        <div>
+          <h3 className="text-lg font-medium">워크스페이스 등록하기</h3>
+          <p className="text-sm text-muted-foreground">
+            워크스페이스의 이름과 관리할 언어 등록합니다.
+          </p>
+        </div>
+        <Separator />
+        <FormField
+          control={form.control}
+          name="title"
+          rules={{ required: true }}
+          render={({ field }) => (
+            <FormItem
+              id={"animate1"}
+              style={{ position: "relative", bottom: -20, opacity: 0 }}
+            >
+              <FormLabel>워크스페이스 제목</FormLabel>
+              <FormControl>
+                <Input placeholder="제목 입력" {...field} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <div className="space-y-8">
           <FormField
             control={form.control}
             name={"langs"}
@@ -219,18 +220,18 @@ export function WorkspaceOnBoarding({ entityId }: { entityId: EntityId }) {
               );
             }}
           ></FormField>
-        </form>
-      </Form>
-      <div className="absolute z-50 shadow-lg bottom-0 left-1/2 -translate-x-1/2">
-        <motion.div
-          {...spring}
-          transition={{ type: "spring", damping: 12, stiffness: 100 }}
-        >
-          <Button size="xl" className="shadow-lg w-[320px]">
-            제출하기
-          </Button>
-        </motion.div>
-      </div>
-    </div>
+        </div>
+        <div className="fixed z-50 bottom-0 left-1/2 -translate-x-[160px] sm:-translate-x-[0px]">
+          <motion.div
+            {...spring}
+            transition={{ type: "spring", damping: 12, stiffness: 100 }}
+          >
+            <Button size="xl" className="shadow-lg w-[320px]" type="submit">
+              제출하기
+            </Button>
+          </motion.div>
+        </div>
+      </form>
+    </Form>
   );
 }
