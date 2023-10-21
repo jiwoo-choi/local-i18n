@@ -3,7 +3,6 @@ import { Topbar } from "@/workspace/topbar/Topbar";
 import { TranslateTableLayout } from "@/workspace/translate-table/TranslateTableLayout";
 
 export function WorkspaceContents() {
-  console.log("asdf");
   return (
     <>
       <Topbar />

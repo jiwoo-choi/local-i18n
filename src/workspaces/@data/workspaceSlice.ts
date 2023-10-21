@@ -80,19 +80,11 @@ export const workspaceSlice = createSlice({
         row: RowType;
       }>
     ) => {
-      const workspace = workspaceNormalizerSelectors.selectById(
-        state.workspaces,
-        workspaceId
-      );
+      const workspace = state.workspaces.entities[workspaceId];
       if (!workspace) {
         return;
       }
       rowNormalizer.addOne(workspace.rows, row);
-      const updateAction: Update<WorkspaceType> = {
-        id: workspaceId,
-        changes: workspace,
-      };
-      workspaceNormalizer.updateOne(state.workspaces, updateAction);
     },
     importsRows: (
       state,
@@ -103,19 +95,11 @@ export const workspaceSlice = createSlice({
         rows: RowType[];
       }>
     ) => {
-      const workspace = workspaceNormalizerSelectors.selectById(
-        state.workspaces,
-        workspaceId
-      );
+      const workspace = state.workspaces.entities[workspaceId];
       if (!workspace) {
         return;
       }
       rowNormalizer.addMany(workspace.rows, rows);
-      const updateAction: Update<WorkspaceType> = {
-        id: workspaceId,
-        changes: workspace,
-      };
-      workspaceNormalizer.updateOne(state.workspaces, updateAction);
     },
     updateCell: (
       state,
