@@ -7,10 +7,13 @@ import {
   rowNormalizer,
 } from "@/workspaces/@data/workspaceSlice";
 import { Layers, Plus } from "lucide-react";
+import { useCurrentWorkspaceID } from "@/workspaces/@data/CurrentWorkspaceProvider";
 
 export function Sidebar() {
   const workspaces = useAppSelector((state) => state.workspaceSlice.workspaces);
   const dispatch = useAppDispatch();
+
+  const { goToWorkspace } = useCurrentWorkspaceID();
 
   return (
     <>
@@ -39,6 +42,7 @@ export function Sidebar() {
             rows: rowNormalizer.getInitialState(),
           };
           dispatch(addWorkspace(newData));
+          goToWorkspace(newData.id);
         }}
       >
         <Plus className={"h-4 w-4"} />

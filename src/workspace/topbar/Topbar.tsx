@@ -1,15 +1,14 @@
-import { CreateLoad } from "./operation/CreateLoad";
+import { WorkspaceSetting } from "@/setting/WorkspaceSetting";
 import { CreateSave } from "@/workspace/topbar/operation/save/CreateSave";
+import { CreateLoad } from "./operation/CreateLoad";
 
 export function Topbar() {
   return (
-    <div className="sticky top-0 w-full border-b z-40 bg-background pr-7 pt-2.5 h-[63px] shadow-sm">
+    <div className="sticky top-0 w-full border-b z-40 bg-background p-3 pt-2.5 h-[63px] shadow-sm">
       <div className="flex justify-between items-center">
         <div></div>
         <div className="flex items-center space-x-3">
-          {/* <Button variant={"outline"} className="shadow-md">
-            불러오기
-          </Button> */}
+          <WorkspaceSetting />
           <CreateLoad />
           <CreateSave />
           {/* <Button

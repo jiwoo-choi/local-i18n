@@ -29,9 +29,9 @@ export function SidebarItem({
       onClick={() => goToWorkspace(workspaceId)}
     >
       <div className="flex justify-betweens items-center w-full">
-        <div className="w-full flex items-center">
+        <div className="w-full flex items-center truncate">
           {renderIcon({ cn: (...inputs) => cn("h-4 w-4 mr-2", inputs) })}
-          {workspace.title}
+          <span className="w-full truncate text-left">{workspace.title}</span>
         </div>
         {isSelect && (
           <X
