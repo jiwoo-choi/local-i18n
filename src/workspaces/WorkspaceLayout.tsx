@@ -1,14 +1,13 @@
-import { useAppSelector } from "@/index";
 import { WorkspaceContents } from "@/workspaces/WorkspaceContents";
 import { WorkspaceEmpty } from "@/workspaces/WorkspaceEmpty";
+import { useCurrentWorkspaceID } from "@/workspaces/@data/CurrentWorkspaceProvider";
+import { WorkspaceStep } from "@/workspaces/@data/workspaceSlice";
 import { WorkspaceOnBoarding } from "@/workspaces/onboarding/WorkspaceOnBoarding";
 import { Sidebar } from "@/workspaces/sidebar/Sidebar";
-import { WorkspaceStep } from "@/workspaces/workspaceSlice";
+import { CurrentRowIDProvider } from "@/workspace/@data/CurrentRowProvider";
 
 export function WorkspaceLayout() {
-  const currentWorkspace = useAppSelector(
-    (state) => state.workspaceSlice.currentWorkspace
-  );
+  const { currWorkspaceId, currWorkspace } = useCurrentWorkspaceID();
   return (
     <div
       className="grid grid-cols-4 lg:grid-cols-5 xl:grid-cols-6"
@@ -23,16 +22,18 @@ export function WorkspaceLayout() {
         </div>
       </div>
       <div className="col-span-4 lg:col-span-4 lg:border-l xl:col-span-5 relative">
-        {currentWorkspace?.step === WorkspaceStep.ON_BOARDING && (
+        {currWorkspace?.step === WorkspaceStep.ON_BOARDING && (
           <WorkspaceOnBoarding
-            key={currentWorkspace.id}
-            id={currentWorkspace.id}
+            key={currWorkspace.id}
+            entityId={currWorkspace.id}
           ></WorkspaceOnBoarding>
         )}
-        {currentWorkspace?.step === WorkspaceStep.CREATED && (
-          <WorkspaceContents />
+        {currWorkspace?.step === WorkspaceStep.CREATED && (
+          <CurrentRowIDProvider workspaceId={currWorkspaceId}>
+            <WorkspaceContents />
+          </CurrentRowIDProvider>
         )}
-        {currentWorkspace == null && <WorkspaceEmpty />}
+        {currWorkspace == null && <WorkspaceEmpty />}
       </div>
     </div>
   );

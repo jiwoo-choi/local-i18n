@@ -10,9 +10,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { useAppDispatch, useAppSelector } from "@/index";
+import { useAppDispatch } from "@/index";
 import { cn } from "@/lib/utils";
-import { WorkspaceStep, updateWorkspace } from "@/workspaces/workspaceSlice";
+import { useCurrentWorkspaceID } from "@/workspaces/@data/CurrentWorkspaceProvider";
+import {
+  WorkspaceStep,
+  rowNormalizer,
+  updateWorkspace,
+} from "@/workspaces/@data/workspaceSlice";
+import { EntityId } from "@reduxjs/toolkit";
 import { motion } from "framer-motion";
 import { useMemo } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -50,25 +56,22 @@ function useSubmitAnimate({
   }, [shouldOpen, isDirty]);
 }
 
-export function WorkspaceOnBoarding({ id }: { id: string }) {
-  const value = useAppSelector(
-    (store) => store.workspaceSlice.currentWorkspace
-  );
+export function WorkspaceOnBoarding({ entityId }: { entityId: EntityId }) {
+  const { currWorkspace } = useCurrentWorkspaceID();
   const dispatch = useAppDispatch();
-
   const form = useForm({
     mode: "onChange",
     defaultValues: {
-      langs: value?.contents?.langs ?? [
+      langs: currWorkspace?.contents?.langs ?? [
         { value: "ko" },
         { value: "en" },
         { value: "cn" },
         { value: "jp" },
       ],
-      title: value?.contents?.title ?? "",
+      title: currWorkspace?.contents?.title ?? "",
     },
   });
-  const { fields, append } = useFieldArray({
+  const { fields } = useFieldArray({
     name: "langs",
     control: form.control,
     rules: { minLength: 2 },
@@ -98,9 +101,9 @@ export function WorkspaceOnBoarding({ id }: { id: string }) {
           onSubmit={form.handleSubmit((data) => {
             dispatch(
               updateWorkspace({
-                rows: [],
+                rows: rowNormalizer.getInitialState(),
                 step: WorkspaceStep.CREATED,
-                id: id,
+                id: entityId,
                 title: data.title,
                 contents: {
                   langs: data.langs.map((value) =>

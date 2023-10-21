@@ -1,18 +1,22 @@
-import { useFormat } from "@/create/format/useFormat";
 import { useAppSelector } from "@/index";
-import { RowType } from "@/workspaces/workspaceSlice";
-import { createEntityAdapter } from "@reduxjs/toolkit";
+import {
+  findByWorkspaceIdSelector,
+  rowNormalizerSelectors,
+} from "@/workspaces/@data/workspaceSelectors";
+import { rowNormalizer } from "@/workspaces/@data/workspaceSlice";
+import { EntityId } from "@reduxjs/toolkit";
 import { saveAs } from "file-saver";
 
-export function useJSON() {
-  const currentWorkspace = useAppSelector(
-    (state) => state.workspaceSlice.currentWorkspace
+export function useJSON(workspaceEntityId: EntityId) {
+  const workspace = useAppSelector(
+    findByWorkspaceIdSelector(workspaceEntityId)
   );
-
+  const rowEntities = workspace?.rows ?? rowNormalizer.getInitialState();
+  const rows = rowNormalizerSelectors.selectAll(rowEntities);
   return {
     // makeJson: makeJson,
     downloadJson: (title: string) => {
-      const all = currentWorkspace?.rows.map((value) => value.langs) ?? [];
+      const all = rows?.map((value) => value.langs) ?? [];
       const reduced = all.reduce((memo, curr) => {
         memo["ko"] = {
           ...{ ...(memo["ko"] ?? {}) },

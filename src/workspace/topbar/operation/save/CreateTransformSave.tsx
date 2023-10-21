@@ -10,17 +10,18 @@ import {
 } from "@/components/ui/dialog";
 import { useState } from "react";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Code } from "lucide-react";
-import SyntaxHighlighter from "react-syntax-highlighter";
-import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useCurrRowID } from "@/workspace/@data/CurrentRowProvider";
 import {
   CodeTransformOption,
   XLSXExportStrategy,
   useXlsx,
 } from "@/workspace/topbar/external/useXlsx";
+import { Code } from "lucide-react";
+import SyntaxHighlighter from "react-syntax-highlighter";
+import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 export function CreateTransformSave() {
   const [title, setTitle] = useState("");
@@ -28,7 +29,8 @@ export function CreateTransformSave() {
     "properties"
   );
 
-  const { downloadXlsx } = useXlsx();
+  const { workspaceOfRowsId } = useCurrRowID();
+  const { downloadXlsx } = useXlsx(workspaceOfRowsId);
 
   return (
     <Dialog>
@@ -74,7 +76,7 @@ export function CreateTransformSave() {
                 style={github}
                 customStyle={{ borderRadius: "0.5rem" }}
               >
-                {`<spring:message code=\"example\"/>`}
+                {`<spring:message code="example"/>`}
               </SyntaxHighlighter>
             </TabsContent>
             <TabsContent value="translate">

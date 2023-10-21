@@ -14,18 +14,20 @@ import { Fragment, useState } from "react";
 
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useCurrRowID } from "@/workspace/@data/CurrentRowProvider";
+import { useJSON } from "@/workspace/topbar/external/useJson";
+import { useProperties } from "@/workspace/topbar/external/useProperties";
 import {
   XLSXExportStrategy,
   useXlsx,
 } from "@/workspace/topbar/external/useXlsx";
-import { Forward, Save } from "lucide-react";
-import { useJSON } from "@/workspace/topbar/external/useJson";
-import { useProperties } from "@/workspace/topbar/external/useProperties";
+import { Save } from "lucide-react";
 
 export function CreateRawSave() {
-  const { downloadProperties } = useProperties();
-  const { downloadJson } = useJSON();
-  const { downloadXlsx } = useXlsx();
+  const { workspaceOfRowsId } = useCurrRowID();
+  const { downloadProperties } = useProperties(workspaceOfRowsId);
+  const { downloadJson } = useJSON(workspaceOfRowsId);
+  const { downloadXlsx } = useXlsx(workspaceOfRowsId);
   const langs = ["ko", "en", "jp", "cn"];
   const [title, setTitle] = useState("");
   const [tab, setTab] = useState<"excel" | "properties" | "json">("excel");

@@ -1,15 +1,15 @@
-import { Button } from "@/components/ui/button";
 import { AsideBar } from "@/workspace/asidebar/AsideBar";
-import { KeyTableHeader } from "@/workspace/table/KeyTableHeader";
 import { Topbar } from "@/workspace/topbar/Topbar";
+import { TranslateTableLayout } from "@/workspace/translate-table/TranslateTableLayout";
 
 export function WorkspaceContents() {
+  console.log("asdf");
   return (
     <>
       <Topbar />
       <div className="flex relative h-full">
         <div className="relative w-full overflow-auto py-3">
-          <KeyTableHeader />
+          <TranslateTableLayout />
         </div>
         <AsideBar />
       </div>

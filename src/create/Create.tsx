@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import {
   Table,
@@ -10,15 +9,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CreateLoad } from "@/workspace/topbar/operation/CreateLoad";
 import { CreateRow } from "@/create/CreateRow";
-import { CreateSave } from "@/workspace/topbar/operation/save/CreateSave";
 import { useFormat } from "@/create/format/useFormat";
 import { useFormatLocalStorage } from "@/create/format/useFormatLocalStorage";
-import { Plus } from "lucide-react";
 import { CreateClear } from "@/workspace/topbar/operation/CreateClear";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CreateLoad } from "@/workspace/topbar/operation/CreateLoad";
+import { CreateSave } from "@/workspace/topbar/operation/save/CreateSave";
 import { Sidebar } from "@/workspaces/sidebar/Sidebar";
+import { Plus } from "lucide-react";
 
 export function Create() {
   const { dataSaveOnLocalStorage, setDataSaveOnLocalStorage } =
