@@ -18,7 +18,8 @@ import {
   Provider,
   TypedUseSelectorHook,
 } from "react-redux";
-import settingSlice from "@/setting/@data/settingSlice";
+import settingSlice from "@/workspaces/workspace-action/@data/settingSlice";
+import translateReplaceSlice from "@/workspaces/workspace-content/contents/translate-replace/@data/translateReplaceSlice";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
@@ -30,6 +31,7 @@ export const store = configureStore({
   reducer: {
     workspaceSlice,
     settingSlice,
+    translateReplaceSlice,
   },
   preloadedState:
     localStorage.getItem("lolo-test") == null
