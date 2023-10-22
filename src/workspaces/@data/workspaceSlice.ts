@@ -125,16 +125,13 @@ export const workspaceSlice = createSlice({
       if (!workspace) {
         return;
       }
-      if (!workspace) {
-        return;
-      }
       const row = workspace.rows.entities[rowId];
       if (!row) {
         return;
       }
       const newLangs =
         cell.langKey && cell.translateValue
-          ? { [cell.langKey]: cell.translateValue }
+          ? { ...row.langs, ...{ [cell.langKey]: cell.translateValue } }
           : { ...row.langs };
       const newTranslateKey = cell.translateKey ?? row.key;
       rowNormalizer.updateOne(workspace.rows, {
