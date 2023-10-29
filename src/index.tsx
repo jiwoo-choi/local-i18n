@@ -1,8 +1,8 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
-import "./index.css";
-import reportWebVitals from "./reportWebVitals";
+import workspaceSlice from "@/workspaces/@data/workspaceSlice";
+import settingSlice from "@/workspaces/workspace-action/@data/settingSlice";
+import translateConditionSlice from "@/workspaces/workspace-content/contents/translate-replace/@data/translateConditionSlice";
+import translateReplaceChangeSlice from "@/workspaces/workspace-content/contents/translate-replace/complete-step/@data/translateReplaceChangeSlice";
+
 import {
   ListenerEffectAPI,
   TypedAddListener,
@@ -11,34 +11,42 @@ import {
   configureStore,
   createListenerMiddleware,
 } from "@reduxjs/toolkit";
-import workspaceSlice from "@/workspaces/@data/workspaceSlice";
+import React from "react";
+import ReactDOM from "react-dom/client";
 import {
-  useDispatch,
-  useSelector,
   Provider,
   TypedUseSelectorHook,
+  useDispatch,
+  useSelector,
 } from "react-redux";
-import settingSlice from "@/workspaces/workspace-action/@data/settingSlice";
-import translateReplaceSlice from "@/workspaces/workspace-content/contents/translate-replace/@data/translateReplaceSlice";
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
+import App from "./App";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
+const rootEl = document.getElementById("root") as HTMLElement;
+
 const listenerMiddlewareInstance = createListenerMiddleware({
   onError: () => console.error,
 });
 
-export const store = configureStore({
-  reducer: {
-    workspaceSlice,
-    settingSlice,
-    translateReplaceSlice,
-  },
-  preloadedState:
-    localStorage.getItem("lolo-test") == null
-      ? undefined
-      : JSON.parse(localStorage.getItem("lolo-test") ?? "{}"),
-  middleware: (gDM) => gDM().prepend(listenerMiddlewareInstance.middleware),
-});
+export const reducers = {
+  workspaceSlice,
+  settingSlice,
+  translateConditionSlice,
+  translateReplaceChangeSlice,
+};
+
+export function createConfigureStore(preloadedState?: any) {
+  return configureStore({
+    reducer: reducers,
+    preloadedState:
+      preloadedState ?? localStorage.getItem("lolo-test") == null
+        ? undefined
+        : JSON.parse(localStorage.getItem("lolo-test") ?? "{}"),
+    middleware: (gDM) => gDM().prepend(listenerMiddlewareInstance.middleware),
+  });
+}
+
+export const store = createConfigureStore();
 store.subscribe(() => {
   localStorage.setItem("lolo-test", JSON.stringify(store.getState()));
 });
@@ -56,15 +64,18 @@ export const startAppListening =
 export const addAppListener = addListener as AppAddListener;
 export type AppListenerEffectAPI = ListenerEffectAPI<RootState, AppDispatch>;
 
-// const myStore = createStore();
-
-root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>
-);
+if (rootEl) {
+  const root = ReactDOM.createRoot(
+    document.getElementById("root") as HTMLElement
+  );
+  root.render(
+    <React.StrictMode>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </React.StrictMode>
+  );
+}
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

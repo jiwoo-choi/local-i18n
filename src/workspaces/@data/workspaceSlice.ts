@@ -109,6 +109,7 @@ export const workspaceSlice = createSlice({
       if (!workspace) {
         return;
       }
+      console.log(workspace);
       rowNormalizer.addMany(workspace.rows, rows);
     },
     updateCell: (

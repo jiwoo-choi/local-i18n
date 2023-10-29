@@ -1,10 +1,4 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -16,14 +10,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { useAppDispatch, useAppSelector } from "@/index";
 import { LanguageKeyType } from "@/language/@data/Language";
 import { useCurrentWorkspaceID } from "@/workspaces/@data/CurrentWorkspaceProvider";
 import {
-  conditionAdapterSelectors,
+  translateConditionAdapterSelectors,
   updateCondition,
-} from "@/workspaces/workspace-content/contents/translate-replace/@data/translateReplaceSlice";
+} from "@/workspaces/workspace-content/contents/translate-replace/@data/translateConditionSlice";
 import { EntityId } from "@reduxjs/toolkit";
 import { useId } from "react";
 
@@ -36,12 +29,14 @@ export function ConditionCard({
 }) {
   const dispatch = useAppDispatch();
   const condition = useAppSelector((state) =>
-    conditionAdapterSelectors.selectById(state.translateReplaceSlice, entityId)
+    translateConditionAdapterSelectors.selectById(
+      state.translateConditionSlice,
+      entityId
+    )
   );
   const { currWorkspace } = useCurrentWorkspaceID();
   const metas = currWorkspace?.contents?.langMeta;
   const id = useId();
-
   return (
     <Card>
       <CardHeader>
@@ -54,6 +49,7 @@ export function ConditionCard({
           onValueChange={(langKey: LanguageKeyType) => {
             dispatch(
               updateCondition({
+                ...condition,
                 entityId: entityId,
                 langKey: langKey,
               })
@@ -78,11 +74,12 @@ export function ConditionCard({
         </Select>
         <Label htmlFor={`${id}_keyword`}>아래 키워드를 만나면..</Label>
         <Input
-          onChange={() => {
+          onChange={(e) => {
             dispatch(
               updateCondition({
+                ...condition,
                 entityId: entityId,
-                targetKeyword: condition?.targetKeyword,
+                targetKeyword: e.target.value,
               })
             );
           }}
@@ -91,11 +88,13 @@ export function ConditionCard({
         />
         <Label htmlFor={`${id}_change`}>다음과 같이 변경할게요..</Label>
         <Input
-          onChange={() => {
+          onChange={(e) => {
+            console.log(condition);
             dispatch(
               updateCondition({
+                ...condition,
                 entityId: entityId,
-                targetKeyword: condition?.replaceKeyword,
+                replaceKeyword: e.target.value,
               })
             );
           }}
