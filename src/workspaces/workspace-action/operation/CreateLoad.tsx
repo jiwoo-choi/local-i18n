@@ -18,6 +18,7 @@ import { useState } from "react";
 export function CreateLoad() {
   const [opened, setOpen] = useState(false);
   const { workspaceOfRowsId } = useCurrRowID();
+  console.log(workspaceOfRowsId);
   const { handleLoadXlsx, parseXlsx } = useXlsx(workspaceOfRowsId);
 
   return (

@@ -7,7 +7,6 @@ import { rowNormalizer } from "@/workspaces/@data/workspaceSlice";
 import { EntityId } from "@reduxjs/toolkit";
 import { saveAs } from "file-saver";
 import { PropertiesEditor } from "properties-file/editor";
-
 export function useProperties(workspaceEntityId: EntityId) {
   const workspace = useAppSelector(
     findByWorkspaceIdSelector(workspaceEntityId)

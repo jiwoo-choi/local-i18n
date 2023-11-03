@@ -1,9 +1,11 @@
-import { startAppListening } from "@/index";
+import { AppStartListening } from "@/index";
 import { LanguageKeyType, LanguageType } from "@/language/@data/Language";
+import { submitChangeResult } from "@/workspaces/workspace-content/contents/translate-replace/complete-step/@data/translateReplaceChangeSlice";
 import {
   EntityId,
   EntityState,
   PayloadAction,
+  Unsubscribe,
   Update,
   createEntityAdapter,
   createSlice,
@@ -109,6 +111,7 @@ export const workspaceSlice = createSlice({
       if (!workspace) {
         return;
       }
+      console.log(workspace);
       rowNormalizer.addMany(workspace.rows, rows);
     },
     updateCell: (
@@ -165,3 +168,44 @@ export const {
   importsRows,
 } = workspaceSlice.actions;
 export default workspaceSlice.reducer;
+
+export function setUpWorkspaceListener(
+  startListening: AppStartListening
+): Unsubscribe {
+  const subscriptions = [
+    startListening({
+      actionCreator: submitChangeResult,
+      effect: (action, { dispatch, unsubscribe, subscribe, getState }) => {
+        unsubscribe();
+        console.log("selected");
+        debugger;
+        const changeResult = getState().translateReplaceChangeSlice;
+        changeResult.ids.forEach((id) => {
+          const data = changeResult.entities[id];
+          if (data && data.isSelected === true) {
+            const { originString, langKey, targetKeyword, replaceKeyword } =
+              data;
+            dispatch(
+              updateCell({
+                workspaceId: action.payload.workspaceId,
+                rowId: id,
+                cell: {
+                  langKey: langKey,
+                  translateValue: originString.replaceAll(
+                    targetKeyword,
+                    replaceKeyword
+                  ),
+                },
+              })
+            );
+          }
+        });
+        subscribe();
+      },
+    }),
+  ];
+
+  return () => {
+    subscriptions.forEach((unsubscribe) => unsubscribe());
+  };
+}

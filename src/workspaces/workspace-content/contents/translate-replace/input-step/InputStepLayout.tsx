@@ -1,20 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { useAppDispatch, useAppSelector } from "@/index";
-import {
-  __init,
-  addCondition,
-} from "@/workspaces/workspace-content/contents/translate-replace/@data/translateReplaceSlice";
+import { addCondition } from "@/workspaces/workspace-content/contents/translate-replace/@data/translateConditionSlice";
 import { ConditionCard } from "@/workspaces/workspace-content/contents/translate-replace/input-step/ConditionCard";
 import { Plus } from "lucide-react";
-import { useEffect } from "react";
 
 export function InputStepLayout() {
-  const ids = useAppSelector((state) => state.translateReplaceSlice.ids);
+  const ids = useAppSelector((state) => state.translateConditionSlice.ids);
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(__init());
-  }, []);
+
   return (
     <div className="flex space-y-4 flex-col">
       <div>
