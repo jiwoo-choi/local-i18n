@@ -177,8 +177,6 @@ export function setUpWorkspaceListener(
       actionCreator: submitChangeResult,
       effect: (action, { dispatch, unsubscribe, subscribe, getState }) => {
         unsubscribe();
-        console.log("selected");
-        debugger;
         const changeResult = getState().translateReplaceChangeSlice;
         changeResult.ids.forEach((id) => {
           const data = changeResult.entities[id];

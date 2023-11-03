@@ -4,6 +4,7 @@ export enum WorkspaceMode {
   DELETE,
   VIEW,
   MODIFY,
+  CODE_TRANSFORM,
 }
 const CurrentWorksapceContext = createContext<{
   workspaceMode: WorkspaceMode;

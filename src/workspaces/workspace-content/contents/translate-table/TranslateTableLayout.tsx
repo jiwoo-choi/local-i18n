@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Table } from "@/components/ui/table";
 import { useAppDispatch } from "@/index";
-import { TableActionLayout } from "@/workspaces/workspace-action/content-aciton/TableActionLayout";
+import { TableActionLayout } from "@/workspaces/workspace-content/contents/content-aciton/TableActionLayout";
 import { useCurrRowID } from "@/workspaces/workspace-content/contents/translate-table/@data/CurrentRowProvider";
 import { TranslateTableBodyLayout } from "@/workspaces/workspace-content/contents/translate-table/TranslateTableBodyLayout";
 import { TranslateTableHeader } from "@/workspaces/workspace-content/contents/translate-table/TranslateTableHeader";

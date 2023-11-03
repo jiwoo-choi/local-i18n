@@ -1,31 +1,15 @@
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { useCurrentWorkspaceID } from "@/workspaces/@data/CurrentWorkspaceProvider";
-import { Replace } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  WorkspaceMode,
-  useCurrentWorkspaceMode,
-} from "@/workspaces/workspace-content/@data/CurrentWorkspaceModeProvider";
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import {
+  WorkspaceMode,
+  useCurrentWorkspaceMode,
+} from "@/workspaces/workspace-content/@data/CurrentWorkspaceModeProvider";
+import { Replace } from "lucide-react";
 
 export function TableFindAndReplace() {
   const { setWorkspaceMode } = useCurrentWorkspaceMode();
