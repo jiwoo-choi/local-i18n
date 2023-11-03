@@ -1,9 +1,7 @@
-import { AppStartListening } from "@/index";
 import { LanguageKeyType } from "@/language/@data/Language";
 import {
   EntityId,
   PayloadAction,
-  Unsubscribe,
   Update,
   createEntityAdapter,
   createSlice,
@@ -55,30 +53,30 @@ export const {
 } = translateConditionSlice.actions;
 export default translateConditionSlice.reducer;
 
-export function setUpTranslateReplaceSlice(
-  startListening: AppStartListening
-): Unsubscribe {
-  const subscriptions = [
-    // startListening({
-    //   actionCreator: __init,
-    //   effect: (action, { dispatch, unsubscribe, subscribe }) => {
-    //     unsubscribe();
-    //     alert("hadsf");
-    //     dispatch(reset());
-    //     subscribe();
-    //   },
-    // }),
-    // startListening({
-    //   actionCreator: __init_change,
-    //   effect: (action, { unsubscribe, dispatch, subscribe }) => {
-    //     unsubscribe();
-    //     dispatch(updateChangesAll(action.payload));
-    //     subscribe();
-    //   },
-    // }),
-  ];
+// export function setUpTranslateReplaceSlice(
+//   startListening: AppStartListening
+// ): Unsubscribe {
+//   const subscriptions = [
+//     // startListening({
+//     //   actionCreator: __init,
+//     //   effect: (action, { dispatch, unsubscribe, subscribe }) => {
+//     //     unsubscribe();
+//     //     alert("hadsf");
+//     //     dispatch(reset());
+//     //     subscribe();
+//     //   },
+//     // }),
+//     // startListening({
+//     //   actionCreator: __init_change,
+//     //   effect: (action, { unsubscribe, dispatch, subscribe }) => {
+//     //     unsubscribe();
+//     //     dispatch(updateChangesAll(action.payload));
+//     //     subscribe();
+//     //   },
+//     // }),
+//   ];
 
-  return () => {
-    // subscriptions.forEach((unsubscribe) => unsubscribe());
-  };
-}
+//   return () => {
+//     // subscriptions.forEach((unsubscribe) => unsubscribe());
+//   };
+// }

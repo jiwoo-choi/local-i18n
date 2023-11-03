@@ -1,9 +1,7 @@
-import { AppStartListening } from "@/index";
 import { LanguageKeyType } from "@/language/@data/Language";
 import {
   EntityId,
   PayloadAction,
-  Unsubscribe,
   Update,
   createEntityAdapter,
   createSlice,
@@ -47,6 +45,12 @@ const translateReplaceChangeSlice = createSlice({
         });
       translateReplaceChangeAdapter.updateMany(state, updates);
     },
+    submitChangeResult: (
+      state,
+      action: PayloadAction<{ workspaceId: EntityId }>
+    ) => {
+      return state;
+    },
     changeRowCellSelect: (
       state,
       {
@@ -71,49 +75,50 @@ export const {
   changeRowCellSelect,
   changeRowCellSelectAll,
   updateChangesAll,
+  submitChangeResult,
   // setAllFromConditions,
 } = translateReplaceChangeSlice.actions;
 export default translateReplaceChangeSlice.reducer;
 
-export function setUpTranslateReplaceSlice(
-  startListening: AppStartListening
-): Unsubscribe {
-  const subscriptions = [
-    startListening({
-      predicate: (action, currentState?, originalState?) => {
-        return (
-          currentState?.translateConditionSlice !=
-          originalState?.translateConditionSlice
-        );
-      },
-      effect: (action, { dispatch, unsubscribe, subscribe, getState }) => {
-        unsubscribe();
-        // const conditionStates =
-        // dispatch(setAllFromConditions(getState().translateConditionSlice));
+// export function setUpTranslateReplaceSlice(
+//   startListening: AppStartListening
+// ): Unsubscribe {
+//   const subscriptions = [
+//     startListening({
+//       predicate: (action, currentState?, originalState?) => {
+//         return (
+//           currentState?.translateConditionSlice !=
+//           originalState?.translateConditionSlice
+//         );
+//       },
+//       effect: (action, { dispatch, unsubscribe, subscribe, getState }) => {
+//         unsubscribe();
+//         // const conditionStates =
+//         // dispatch(setAllFromConditions(getState().translateConditionSlice));
 
-        // Object.values(conditionEntities).reduce((memo, curr) => {
-        //   if (!curr) {
-        //     return memo;
-        //   }
-        //   if (!curr.langKey) {
-        //     return memo;
-        //   }
-        //   if (memo[curr.langKey] == null) {
-        //     memo[curr.langKey] = [];
-        //   }
-        //   memo[curr.langKey].push({
-        //     replaceKeyword: curr?.replaceKeyword,
-        //     targetKeyword: curr?.targetKeyword,
-        //   });
-        //   return memo;
-        // }, {} as Record<LanguageKeyType, Pick<ConditionType, "replaceKeyword" | "targetKeyword">[]>);
+//         // Object.values(conditionEntities).reduce((memo, curr) => {
+//         //   if (!curr) {
+//         //     return memo;
+//         //   }
+//         //   if (!curr.langKey) {
+//         //     return memo;
+//         //   }
+//         //   if (memo[curr.langKey] == null) {
+//         //     memo[curr.langKey] = [];
+//         //   }
+//         //   memo[curr.langKey].push({
+//         //     replaceKeyword: curr?.replaceKeyword,
+//         //     targetKeyword: curr?.targetKeyword,
+//         //   });
+//         //   return memo;
+//         // }, {} as Record<LanguageKeyType, Pick<ConditionType, "replaceKeyword" | "targetKeyword">[]>);
 
-        subscribe();
-      },
-    }),
-  ];
+//         subscribe();
+//       },
+//     }),
+//   ];
 
-  return () => {
-    subscriptions.forEach((unsubscribe) => unsubscribe());
-  };
-}
+//   return () => {
+//     subscriptions.forEach((unsubscribe) => unsubscribe());
+//   };
+// }

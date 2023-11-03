@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { useAppDispatch } from "@/index";
 import { SwitchCase } from "@/lib/SwitchCase";
+import { useCurrentWorkspaceID } from "@/workspaces/@data/CurrentWorkspaceProvider";
 import {
   useCurrentWorkspaceMode,
   WorkspaceMode,
 } from "@/workspaces/workspace-content/@data/CurrentWorkspaceModeProvider";
+import { submitChangeResult } from "@/workspaces/workspace-content/contents/translate-replace/complete-step/@data/translateReplaceChangeSlice";
 import { CompleteStepLayout } from "@/workspaces/workspace-content/contents/translate-replace/complete-step/CompleteStepLayout";
 import { InputStepLayout } from "@/workspaces/workspace-content/contents/translate-replace/input-step/InputStepLayout";
 import { TranslateReplaceStep } from "@/workspaces/workspace-content/contents/translate-replace/TranslateReplaceStep";
@@ -15,6 +17,7 @@ export function TranslateReplaceLayout() {
   const [step, setStep] = useState(
     TranslateReplaceStep.INPUT_LANGUAGES_KEYWORD
   );
+  const { currWorkspaceId } = useCurrentWorkspaceID();
   const { setWorkspaceMode } = useCurrentWorkspaceMode();
   const dispatch = useAppDispatch();
 
@@ -62,6 +65,14 @@ export function TranslateReplaceLayout() {
             <Button
               className="hover:shadow-lg hover:drop-shadow-sm"
               onClick={() => {
+                if (
+                  step + 1 === TranslateReplaceStep.FINISH &&
+                  currWorkspaceId
+                ) {
+                  dispatch(
+                    submitChangeResult({ workspaceId: currWorkspaceId })
+                  );
+                }
                 setStep(step + 1);
               }}
             >
@@ -70,11 +81,6 @@ export function TranslateReplaceLayout() {
             </Button>
           </div>
         </div>
-        {/* <motion.div
-          {...spring}
-          transition={{ type: "spring", damping: 12, stiffness: 100 }}
-        >
-        </motion.div> */}
       </div>
     </>
   );
