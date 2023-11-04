@@ -1,27 +1,30 @@
+const generateDicLink = (langUrlKey: string, query: string) =>
+  `https://${langUrlKey}.dict.naver.com/#/search?query=${query}`;
+
 export const LANGUAGES = {
   KO: {
     key: "KO",
     name: "한국어",
     sort: 0,
-    dicLink: "https://ko.dict.naver.com/#/search?query={{query}}",
+    makeDicLink: (query: string) => generateDicLink("ko", query),
   },
   EN: {
     key: "EN",
     name: "영어",
     sort: 1,
-    dicLink: "https://en.dict.naver.com/#/search?query={{query}}",
+    makeDicLink: (query: string) => generateDicLink("en", query),
   },
   CN: {
     key: "CN",
     name: "중국어",
     sort: 2,
-    dicLink: "https://zh.dict.naver.com/#/search?query={{query}}",
+    makeDicLink: (query: string) => generateDicLink("zh", query),
   },
   JP: {
     key: "JP",
     name: "일본어",
     sort: 3,
-    dicLink: "https://ja.dict.naver.com/#/search?query={{query}}",
+    makeDicLink: (query: string) => generateDicLink("ja", query),
   },
 } as const;
 

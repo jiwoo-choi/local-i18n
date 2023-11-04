@@ -4,6 +4,7 @@ import {
   WorkspaceMode,
   useCurrentWorkspaceMode,
 } from "@/workspaces/workspace-content/@data/CurrentWorkspaceModeProvider";
+import { TranslateCodeTransformLayout } from "@/workspaces/workspace-content/contents/translate-code-transform/TranslateCodeTransformLayout";
 import { reset } from "@/workspaces/workspace-content/contents/translate-replace/@data/translateConditionSlice";
 import { TranslateReplaceLayout } from "@/workspaces/workspace-content/contents/translate-replace/TranslateReplaceLayout";
 import { TranslateTableLayout } from "@/workspaces/workspace-content/contents/translate-table/TranslateTableLayout";
@@ -22,6 +23,7 @@ export function TranslateContentLayout() {
         [WorkspaceMode.DELETE]: <></>,
         [WorkspaceMode.VIEW]: <TranslateTableLayout />,
         [WorkspaceMode.MODIFY]: <TranslateReplaceLayout />,
+        [WorkspaceMode.CODE_TRANSFORM]: <TranslateCodeTransformLayout />,
       }}
       value={workspaceMode}
     />

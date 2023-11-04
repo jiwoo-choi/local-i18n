@@ -6,6 +6,7 @@ import { useCurrRowID } from "@/workspaces/workspace-content/contents/translate-
 import { useCurrentWorkspaceID } from "@/workspaces/@data/CurrentWorkspaceProvider";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { CODES } from "@/language/@data/Codes";
 
 export function AsideBar() {
   const { currRow, currRowId } = useCurrRowID();
@@ -35,39 +36,32 @@ export function AsideBar() {
               코드에 바로 적용할 수 있는 형태로 변환해드려요.
             </p>
           </div>
-          <Tabs defaultValue="properties" className="w-[360px] relative ">
+          <Tabs
+            defaultValue={CODES.SPRING_PROPERTIES.key}
+            className="w-[360px] relative "
+          >
             <TabsList className="grid grid-cols-3 w-full mb-4">
-              <TabsTrigger value="properties">properties</TabsTrigger>
-              <TabsTrigger value="translate">translate</TabsTrigger>
-              <TabsTrigger value="IM">IM</TabsTrigger>
+              {Object.values(CODES).map((value) => {
+                return (
+                  <TabsTrigger value={value.key} key={value.key}>
+                    {value.name}
+                  </TabsTrigger>
+                );
+              })}
             </TabsList>
-            <TabsContent value="properties">
-              <SyntaxHighlighter
-                language="javascript"
-                style={github}
-                customStyle={{ borderRadius: "0.5rem" }}
-              >
-                {`<spring:message code="${currRow.key}"/>`}
-              </SyntaxHighlighter>
-            </TabsContent>
-            <TabsContent value="translate">
-              <SyntaxHighlighter
-                language="javascript"
-                style={github}
-                customStyle={{ borderRadius: "0.5rem" }}
-              >
-                {`t('${currRow.key}')`}
-              </SyntaxHighlighter>
-            </TabsContent>
-            <TabsContent value="IM">
-              <SyntaxHighlighter
-                language="javascript"
-                style={github}
-                customStyle={{ borderRadius: "0.5rem" }}
-              >
-                {`IM('${currRow.key}')`}
-              </SyntaxHighlighter>
-            </TabsContent>
+            {Object.values(CODES).map((value) => {
+              return (
+                <TabsContent value={value.key} key={value.key}>
+                  <SyntaxHighlighter
+                    language="javascript"
+                    style={github}
+                    customStyle={{ borderRadius: "0.5rem" }}
+                  >
+                    {value.makeTransformedCode(currRow.key)}
+                  </SyntaxHighlighter>
+                </TabsContent>
+              );
+            })}
           </Tabs>
         </section>
         <section>
@@ -103,20 +97,14 @@ export function AsideBar() {
                           onClick={(e) => {
                             e.preventDefault();
                             window.open(
-                              LANGUAGES[value.key].dicLink.replace(
-                                "{{query}}",
-                                item.segment
-                              ),
+                              LANGUAGES[value.key].makeDicLink(item.segment),
                               "PopupWin",
                               "width=600,height=800"
                             );
                           }}
                           href={
                             item.isWordLike
-                              ? LANGUAGES[value.key].dicLink.replace(
-                                  "{{query}}",
-                                  item.segment
-                                )
+                              ? LANGUAGES[value.key].makeDicLink(item.segment)
                               : ""
                           }
                           rel="noreferrer"
