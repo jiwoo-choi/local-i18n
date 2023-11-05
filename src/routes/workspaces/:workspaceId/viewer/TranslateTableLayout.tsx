@@ -15,7 +15,7 @@ export function TranslateTableLayout() {
   const { workspaceId } = useWorkspaceDetail();
 
   return (
-    <div className="">
+    <div className="w-full">
       <Table>
         <TranslateTableHeader isDeleteMode={isDeleteMode} />
         <TranslateTableBody isDeleteMode={isDeleteMode} />

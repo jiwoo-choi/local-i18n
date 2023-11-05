@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import { removeWorkspaces } from "@/globalDataSlice";
 import { useAppDispatch, useAppSelector } from "@/index";
+import { useIdGenerator } from "@/lib/useIdGenerator";
 import { EntityId } from "@reduxjs/toolkit";
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router";
@@ -39,6 +40,8 @@ export function WorkspaceListTable({
       return deleteValue[key] === true;
     });
   }, [deleteValue]);
+
+  const idGenerator = useIdGenerator();
   return (
     <>
       <Table>
@@ -51,9 +54,9 @@ export function WorkspaceListTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {workspaces.ids.map((id) => (
+          {workspaces.ids.map((id, index) => (
             <TableRow
-              key={id}
+              key={idGenerator(id, index)}
               onClick={() => {
                 !isDeleteMode && navigate(`/workspaces/${id}`);
                 isDeleteMode &&
@@ -75,9 +78,15 @@ export function WorkspaceListTable({
               </TableCell>
               <TableCell className="w-[300px]">
                 <div className="flex gap-1">
-                  {workspaces.entities[id]?.contents?.langMeta.map((value) => {
-                    return <Badge>{value.name}</Badge>;
-                  })}
+                  {workspaces.entities[id]?.contents?.langMeta.map(
+                    (value, index) => {
+                      return (
+                        <Badge key={idGenerator(value.key, index)}>
+                          {value.name}
+                        </Badge>
+                      );
+                    }
+                  )}
                 </div>
               </TableCell>
               <TableCell className="text-center">

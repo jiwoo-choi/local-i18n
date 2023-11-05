@@ -15,6 +15,7 @@ import {
 } from "@/globalDataSlice";
 import { useAppDispatch, useAppSelector } from "@/index";
 import { useCheckSelectReducer } from "@/lib/useCheckSelectReducer";
+import { useIdGenerator } from "@/lib/useIdGenerator";
 import { useWorkspaceDetail } from "@/routes/workspaces/:workspaceId/WorkspaceDetailProvider";
 import { columns } from "@/routes/workspaces/:workspaceId/delete/columns";
 import { EntityId } from "@reduxjs/toolkit";
@@ -47,6 +48,8 @@ export function Layout() {
     useCheckSelectReducer(initialState);
   const appDispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const idGen = useIdGenerator();
 
   return (
     <div className="">
@@ -107,7 +110,7 @@ export function Layout() {
         <TableBody>
           {ids.map((entityId, index) => {
             return (
-              <TableRow>
+              <TableRow key={idGen(entityId, index, "tablerow")}>
                 {columns.map((value) => {
                   const row = entities[entityId];
                   if (!row) {

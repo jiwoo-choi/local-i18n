@@ -7,26 +7,26 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { github } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { CODES } from "@/language/Codes";
 import { useWorkspaceDetail } from "@/routes/workspaces/:workspaceId/WorkspaceDetailProvider";
+import { useAppSelector } from "@/index";
+import { findByRowIdSelector } from "@/globalDataQueries";
 
 export function AsideBar() {
-  // const { currRow, currRowId } = useCurrRowID();
-  const currRow = undefined;
-  const currRowId = undefined;
-  const { workspaceId } = useWorkspaceDetail();
-
+  const { currentRowId, workspaceId } = useWorkspaceDetail();
+  const currentRow = useAppSelector(
+    findByRowIdSelector(workspaceId, currentRowId ?? "")
+  );
   const splited = useSplitWordFromRow({
-    rowId: currRowId ?? "",
+    rowId: currentRowId ?? "",
     workspaceId: workspaceId ?? "",
   });
 
-  if (!currRow) {
+  if (!currentRow) {
     return null;
   }
   return (
     <>
-      <div className="relative h-screen bg-background inset-y-0 right-0 hidden lg:block min-w-[420px]"></div>
       <div
-        className="fixed top-[63px] h-screen gap-4 bg-background p-6 shadow-lg inset-y-0 right-0 border-l hidden lg:block w-[420px] space-y-9 overflow-y-scroll"
+        className="fixed top-[57px] h-screen gap-4 bg-background p-6 shadow-lg inset-y-0 right-0 border-l block w-[420px] space-y-9 overflow-y-scroll"
         style={{ height: "calc(100% - 63px)" }}
       >
         <section>
@@ -59,7 +59,7 @@ export function AsideBar() {
                     style={github}
                     customStyle={{ borderRadius: "0.5rem" }}
                   >
-                    {value.makeTransformedCode("currRow.key")}
+                    {value.makeTransformedCode(currentRow.key)}
                   </SyntaxHighlighter>
                 </TabsContent>
               );
@@ -78,7 +78,7 @@ export function AsideBar() {
           <div className="grid space-y-4">
             {splited.map((value) => {
               return (
-                <div>
+                <div key={value.key}>
                   <div className="pb-2">
                     <small className="text-sm font-medium leading-none">
                       {LANGUAGES[value.key].name}

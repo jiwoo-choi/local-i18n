@@ -30,24 +30,26 @@ export function Layout() {
   return (
     <WorkspaceDetailProivder workspaceId={workspaceId}>
       <OperationDialogOpenProvider>
-        <div className="flex justify-between items-center">
-          <div className="flex flex-row gap-2 p-2 items-center">
-            <WorkspaceDetailChanger />
-            <WorkspaceDetailMenuBar />
+        <div className="sticky top-0 bg-white z-10">
+          <div className="flex justify-between items-center ">
+            <div className="flex flex-row gap-2 p-2 items-center">
+              <WorkspaceDetailChanger />
+              <WorkspaceDetailMenuBar />
+            </div>
+            <Button
+              variant={"secondary"}
+              className="mr-3"
+              size="sm"
+              onClick={() => {
+                navigate("/workspaces");
+              }}
+            >
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              워크스페이스 목록으로
+            </Button>
           </div>
-          <Button
-            variant={"secondary"}
-            className="mr-3"
-            size="sm"
-            onClick={() => {
-              navigate("/workspaces");
-            }}
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            워크스페이스 목록으로
-          </Button>
+          <Separator />
         </div>
-        <Separator />
         <Outlet />
       </OperationDialogOpenProvider>
     </WorkspaceDetailProivder>

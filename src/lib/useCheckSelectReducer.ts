@@ -40,7 +40,6 @@ export function useCheckSelectReducer(initialState: SelectState = {}) {
       return memo;
     }, [] as EntityId[]);
   }, [stateMap]);
-  console.log(stateMap);
   return {
     dispatch,
     stateMap,

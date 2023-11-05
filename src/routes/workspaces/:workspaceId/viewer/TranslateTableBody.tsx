@@ -3,6 +3,7 @@ import { findByWorkspaceIdSelector } from "@/globalDataQueries";
 import { useAppSelector } from "@/index";
 import { useWorkspaceDetail } from "@/routes/workspaces/:workspaceId/WorkspaceDetailProvider";
 import { TranslateTableBodyRow } from "@/routes/workspaces/:workspaceId/viewer/TranslateTableBodyRow";
+import { useId } from "react";
 
 export function TranslateTableBody({
   isDeleteMode,
@@ -14,13 +15,15 @@ export function TranslateTableBody({
     findByWorkspaceIdSelector(workspaceId)
   );
 
+  const id = useId();
+
   return (
     <TableBody>
       {currentWorkspace?.rows.ids?.map((value, index) => {
         return (
           <TranslateTableBodyRow
             rowId={value}
-            key={index}
+            key={`${value}_${id}_${index}`}
             isDeleteMode={isDeleteMode}
           />
         );
