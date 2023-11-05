@@ -1,7 +1,13 @@
 import { findByWorkspaceIdSelector } from "@/globalDataQueries";
 import { useAppSelector } from "@/index";
 import { EntityId } from "@reduxjs/toolkit";
-import { ReactNode, createContext, useContext, useState } from "react";
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 const WorkspaceDetailContext = createContext<{
   workspaceId: EntityId;
@@ -21,7 +27,9 @@ export function WorkspaceDetailProivder({
   workspaceId: EntityId;
 }) {
   const [currRowId, setCurrRowId] = useState<EntityId | undefined>(undefined);
-
+  useEffect(() => {
+    setCurrRowId(undefined);
+  }, [workspaceId]);
   return (
     <WorkspaceDetailContext.Provider
       value={{
