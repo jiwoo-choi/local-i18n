@@ -1,4 +1,4 @@
-import { RowType } from "@/workspaces/@data/workspaceSlice";
+import { RowType } from "@/globalDataSlice";
 import Ajv, { JTDSchemaType } from "ajv/dist/jtd";
 import { useMemo } from "react";
 const ajv = new Ajv();
