@@ -2,8 +2,8 @@ import { useAppSelector } from "@/index";
 import {
   findByWorkspaceIdSelector,
   rowNormalizerSelectors,
-} from "@/workspaces/@data/workspaceSelectors";
-import { rowNormalizer } from "@/workspaces/@data/workspaceSlice";
+} from "@/globalDataQueries";
+import { rowNormalizer } from "@/globalDataSlice";
 import { EntityId } from "@reduxjs/toolkit";
 import { saveAs } from "file-saver";
 import { PropertiesEditor } from "properties-file/editor";

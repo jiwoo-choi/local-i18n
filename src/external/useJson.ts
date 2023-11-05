@@ -1,10 +1,10 @@
 import { useAppSelector } from "@/index";
-import { LANGUAGES } from "@/language/@data/Language";
+import { LANGUAGES } from "@/language/Language";
 import {
   findByWorkspaceIdSelector,
   rowNormalizerSelectors,
-} from "@/workspaces/@data/workspaceSelectors";
-import { rowNormalizer } from "@/workspaces/@data/workspaceSlice";
+} from "@/globalDataQueries";
+import { rowNormalizer } from "@/globalDataSlice";
 import { EntityId } from "@reduxjs/toolkit";
 import { saveAs } from "file-saver";
 

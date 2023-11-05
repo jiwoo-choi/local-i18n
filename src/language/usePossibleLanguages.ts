@@ -1,9 +1,9 @@
 import { useAppSelector } from "@/index";
-import { LANGUAGES, LanguageKeyType } from "@/language/@data/Language";
+import { LANGUAGES, LanguageKeyType } from "@/language/Language";
 import {
   findByRowIdSelector,
   findByWorkspaceIdSelector,
-} from "@/workspaces/@data/workspaceSelectors";
+} from "@/globalDataQueries";
 import { EntityId } from "@reduxjs/toolkit";
 import { useMemo } from "react";
 

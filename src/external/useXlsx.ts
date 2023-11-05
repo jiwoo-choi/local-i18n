@@ -1,23 +1,15 @@
 import { useAppDispatch, useAppSelector } from "@/index";
-import { LANGUAGES } from "@/language/@data/Language";
+import { LANGUAGES } from "@/language/Language";
 import {
   findByWorkspaceIdSelector,
   rowNormalizerSelectors,
-} from "@/workspaces/@data/workspaceSelectors";
-import {
-  RowType,
-  importsRows,
-  rowNormalizer,
-} from "@/workspaces/@data/workspaceSlice";
+} from "@/globalDataQueries";
+import { RowType, importsRows, rowNormalizer } from "@/globalDataSlice";
 import { EntityId } from "@reduxjs/toolkit";
 import { ChangeEvent, useId } from "react";
 import * as XLSX from "xlsx";
+import { CODES, CodeKeyType } from "@/language/Codes";
 
-export enum CodeTransformOption {
-  IM,
-  SPRING_PROPERTIES,
-  NEXT_TRANSLATE,
-}
 export enum XLSXExportStrategy {
   DOWNLOAD_ALL,
   WITH_TRANSFORM,
@@ -45,21 +37,10 @@ function downloadAllStrategy(data: RowType[]) {
   };
 }
 
-function downloadWithTransformStrategy(
-  data: RowType[],
-  transformOption: CodeTransformOption
-) {
+function downloadWithTransformStrategy(data: RowType[], codeKey: CodeKeyType) {
   const transformByCodeTransformOption = function (key: string) {
-    switch (transformOption) {
-      case CodeTransformOption.IM:
-        return `IM('${key}')`;
-      case CodeTransformOption.NEXT_TRANSLATE:
-        return `t('${key}')`;
-      case CodeTransformOption.SPRING_PROPERTIES:
-        return `<spring:message code="${key}"/>`;
-    }
+    return CODES[codeKey].makeTransformedCode(key);
   };
-
   const wb = XLSX.utils.book_new();
   const ws = XLSX.utils.aoa_to_sheet([
     [
@@ -137,7 +118,7 @@ export function useXlsx(workspaceEntityId: EntityId) {
       | {
           title: string;
           exportStrategy: XLSXExportStrategy.WITH_TRANSFORM;
-          transformOption: CodeTransformOption;
+          transformOption: CodeKeyType;
         }
       | {
           title: string;

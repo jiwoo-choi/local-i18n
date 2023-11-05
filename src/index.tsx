@@ -1,8 +1,7 @@
-import workspaceSlice from "@/workspaces/@data/workspaceSlice";
-import settingSlice from "@/workspaces/workspace-action/@data/settingSlice";
-import translateConditionSlice from "@/workspaces/workspace-content/contents/translate-replace/@data/translateConditionSlice";
-import translateReplaceChangeSlice from "@/workspaces/workspace-content/contents/translate-replace/complete-step/@data/translateReplaceChangeSlice";
-
+import globalDataSlice from "@/globalDataSlice";
+import settingSlice from "@/routes/workspaces/settingSlice";
+import translateConditionSlice from "@/routes/workspaces/:workspaceId/replace/translateConditionSlice";
+import translateReplaceChangeSlice from "@/routes/workspaces/:workspaceId/replace/translateReplaceChangeSlice";
 import {
   ListenerEffectAPI,
   TypedAddListener,
@@ -19,9 +18,34 @@ import {
   useDispatch,
   useSelector,
 } from "react-redux";
-import App from "./App";
+import { SetUpListener } from "./lib/SetupListener";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
+
+import {
+  createBrowserRouter,
+  redirect,
+  RouterProvider,
+} from "react-router-dom";
+/**
+ * Routers
+ */
+import { Layout as WorkspaceListLayout } from "@/routes/workspaces";
+import { Layout as WorkspaceDetailLayout } from "@/routes/workspaces/:workspaceId/viewer";
+import { Layout as WorkspaceCreateLayout } from "@/routes/create";
+import { Layout as WorkspaceTransformLayout } from "@/routes/workspaces/:workspaceId/transform";
+import { Layout as WorkspaceReplaceLayout } from "@/routes/workspaces/:workspaceId/replace";
+import { Layout as WorkspaceReplaceConditionLayout } from "@/routes/workspaces/:workspaceId/replace/condition";
+import { Layout as WorkspaceDeleteLayout } from "@/routes/workspaces/:workspaceId/delete";
+
+import {
+  Layout as WorkspaceReplaceResultLayout,
+  loader as workspaceReplaceResultLoader,
+} from "@/routes/workspaces/:workspaceId/replace/result";
+import {
+  Layout as WorkspaceIdLayout,
+  loader as workspaceIdLoader,
+} from "@/routes/workspaces/:workspaceId";
 const rootEl = document.getElementById("root") as HTMLElement;
 
 const listenerMiddlewareInstance = createListenerMiddleware({
@@ -29,7 +53,7 @@ const listenerMiddlewareInstance = createListenerMiddleware({
 });
 
 export const reducers = {
-  workspaceSlice,
+  globalDataSlice,
   settingSlice,
   translateConditionSlice,
   translateReplaceChangeSlice,
@@ -51,9 +75,66 @@ store.subscribe(() => {
   localStorage.setItem("lolo-test", JSON.stringify(store.getState()));
 });
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
+const router = createBrowserRouter([
+  {
+    path: "*",
+    loader: async () => {
+      return redirect("/workspaces");
+    },
+  },
+  {
+    path: "/workspaces",
+    element: <WorkspaceListLayout />,
+  },
+  {
+    path: "/create",
+    element: <WorkspaceCreateLayout />,
+  },
+  {
+    path: "/workspaces/:workspaceId",
+    element: <WorkspaceIdLayout />,
+    loader: workspaceIdLoader,
+    children: [
+      {
+        index: true,
+        element: <WorkspaceDetailLayout />,
+      },
+      {
+        path: "/workspaces/:workspaceId/viewer",
+        element: <WorkspaceDetailLayout />,
+      },
+      {
+        path: "/workspaces/:workspaceId/delete",
+        element: <WorkspaceDeleteLayout />,
+      },
+      {
+        path: "/workspaces/:workspaceId/transform",
+        element: <WorkspaceTransformLayout />,
+      },
+      {
+        path: "/workspaces/:workspaceId/replace",
+        element: <WorkspaceReplaceLayout />,
+        children: [
+          {
+            index: true,
+            element: <WorkspaceReplaceConditionLayout />,
+          },
+          {
+            path: "/workspaces/:workspaceId/replace/condition",
+            element: <WorkspaceReplaceConditionLayout />,
+          },
+          {
+            path: "/workspaces/:workspaceId/replace/result",
+            element: <WorkspaceReplaceResultLayout />,
+            loader: workspaceReplaceResultLoader,
+          },
+        ],
+      },
+    ],
+  },
+]);
+
 export type RootState = ReturnType<typeof store.getState>;
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
@@ -71,13 +152,11 @@ if (rootEl) {
   root.render(
     <React.StrictMode>
       <Provider store={store}>
-        <App />
+        <SetUpListener />
+        <RouterProvider router={router} />
       </Provider>
     </React.StrictMode>
   );
 }
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

@@ -1,6 +1,6 @@
 import { useAppSelector } from "@/index";
 import { usePossibleLanguages } from "@/language/usePossibleLanguages";
-import { findByRowIdSelector } from "@/workspaces/@data/workspaceSelectors";
+import { findByRowIdSelector } from "@/globalDataQueries";
 import { EntityId } from "@reduxjs/toolkit";
 import { useMemo } from "react";
 
