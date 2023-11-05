@@ -36,6 +36,8 @@ import { Layout as WorkspaceCreateLayout } from "@/routes/create";
 import { Layout as WorkspaceTransformLayout } from "@/routes/workspaces/:workspaceId/transform";
 import { Layout as WorkspaceReplaceLayout } from "@/routes/workspaces/:workspaceId/replace";
 import { Layout as WorkspaceReplaceConditionLayout } from "@/routes/workspaces/:workspaceId/replace/condition";
+import { Layout as WorkspaceDeleteLayout } from "@/routes/workspaces/:workspaceId/delete";
+
 import {
   Layout as WorkspaceReplaceResultLayout,
   loader as workspaceReplaceResultLoader,
@@ -103,7 +105,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/workspaces/:workspaceId/delete",
-        element: <>delete 준비 중..</>,
+        element: <WorkspaceDeleteLayout />,
       },
       {
         path: "/workspaces/:workspaceId/transform",

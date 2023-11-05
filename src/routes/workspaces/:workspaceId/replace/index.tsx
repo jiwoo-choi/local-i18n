@@ -1,10 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { useWorkspaceDetail } from "@/routes/workspaces/:workspaceId/WorkspaceDetailProvider";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { Outlet, useNavigate } from "react-router";
+import { useMemo } from "react";
+import { Outlet, matchPath, useLocation, useNavigate } from "react-router";
 
 export function Layout() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const isBackAvailable = useMemo(() => {
+    return (
+      matchPath(
+        `/workspaces/:workspaceId/replace/result`,
+        location.pathname
+      ) !== null
+    );
+  }, [location]);
 
   const { workspaceId } = useWorkspaceDetail();
   return (
@@ -17,15 +27,17 @@ export function Layout() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button
-            variant={"outline"}
-            onClick={() => {
-              navigate(-1);
-            }}
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            이전
-          </Button>
+          {isBackAvailable && (
+            <Button
+              variant={"outline"}
+              onClick={() => {
+                navigate(`/workspaces/${workspaceId}/replace/condition`, {});
+              }}
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              condition으로 돌아가기
+            </Button>
+          )}
           <Button
             variant={"outline"}
             onClick={() => {

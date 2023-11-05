@@ -101,6 +101,18 @@ export const workspaceListSlice = createSlice({
       }
       rowNormalizer.addOne(workspace.rows, row);
     },
+    removeRows: (
+      state,
+      {
+        payload: { workspaceId, rowIds },
+      }: PayloadAction<{ workspaceId: EntityId; rowIds: EntityId[] }>
+    ) => {
+      const workspace = state.workspaceList.entities[workspaceId];
+      if (!workspace) {
+        return;
+      }
+      rowNormalizer.removeMany(workspace.rows, rowIds);
+    },
     importsRows: (
       state,
       {
@@ -165,6 +177,7 @@ export const {
   updateWorkspace,
   updateCell,
   importsRows,
+  removeRows,
   removeWorkspaces,
 } = workspaceListSlice.actions;
 export default workspaceListSlice.reducer;
