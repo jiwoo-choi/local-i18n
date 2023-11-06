@@ -1,15 +1,14 @@
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { AppDispatch, useAppSelector } from "@/index";
+import { AppDispatch } from "@/index";
 import { LANGUAGES, LanguageKeyType } from "@/language/Language";
 import {
   ChangeRowType,
   changeRowCellSelect,
   changeRowCellSelectAll,
-  translateReplaceChangeAdaterSelectors,
 } from "@/routes/workspaces/:workspaceId/replace/translateReplaceChangeSlice";
 // import {
-
+import sanitzeHtml from "sanitize-html";
 //   changeRowCellSelectAll,
 // } from "@/workspaces/workspace-content/contents/translate-replace/@data/translateReplaceSlice";
 import { FunctionComponent } from "react";
@@ -93,11 +92,17 @@ export const columns: readonly {
     cell: ({ row }) => {
       // cell.getContext().table.get
       //
-
       const replace = row.originString.replaceAll(
         row.targetKeyword,
         (value) => {
-          return `<span class="underline bg-red-200 font-bold">${value}</span>`;
+          return `<span class="underline bg-red-200 font-bold">${sanitzeHtml(
+            value,
+            {
+              allowedTags: [],
+              disallowedTagsMode: "escape",
+              enforceHtmlBoundary: true,
+            }
+          )}</span>`;
         }
       );
       return (
@@ -115,9 +120,15 @@ export const columns: readonly {
     header: () => <div className="text-center">변경되는 문구</div>,
     cell: ({ row }) => {
       const replace = row.originString.replaceAll(row.targetKeyword, () => {
-        return `<span class="underline bg-green-200 font-bold">${row.replaceKeyword}</span>`;
+        return `<span class="underline bg-green-200 font-bold">${sanitzeHtml(
+          row.replaceKeyword,
+          {
+            allowedTags: [],
+            disallowedTagsMode: "escape",
+            enforceHtmlBoundary: true,
+          }
+        )}</span>`;
       });
-
       return (
         <div
           className="text-left"
